@@ -1,6 +1,6 @@
-# alts.sale
+# crypto-cap-watcher
 
-> Altcoins for sale website
+> Crypto Cap Watcher
 
 ## Build Setup
 
