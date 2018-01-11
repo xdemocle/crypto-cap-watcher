@@ -10,6 +10,7 @@
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js",
+    "heroku-prebuild": "rm -rf /dist && yarn add express && yarn run build",
     "start": "node server-dist.js"
   },
   "dependencies": {
