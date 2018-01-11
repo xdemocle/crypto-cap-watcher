@@ -65,7 +65,7 @@
 <style lang="scss">
   .dynamic-placeholder {
     transition: opacity 0.25s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-    opacity: 1;
+    opacity: 1;;
   }
 
   .opa-a {

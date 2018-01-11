@@ -9,8 +9,9 @@ const state = {
   secondsLeft: 0,
   last_updated: null,
   total_market_cap: 0,
-  bitcoin_percentage_of_market_cap: 0,
-  total_24h_volume: 0
+  bitcoin_percentage: 0,
+  total_24h_volume: 0,
+  history: []
 };
 
 // getters
@@ -21,9 +22,10 @@ const getters = {
   last_updated: state => state.last_updated,
   total_market_cap: state => state.total_market_cap,
   total_24h_volume: state => state.total_24h_volume,
-  bitcoin_percentage_of_market_cap(state) {
-    return [state.bitcoin_percentage_of_market_cap, '%'].join('');
-  }
+  bitcoin_percentage(state) {
+    return [state.bitcoin_percentage, '%'].join('');
+  },
+  history: state => state.history
 };
 
 // actions
@@ -39,7 +41,7 @@ const actions = {
     const ajaxCall = Vue.axios.get(url);
 
     ajaxCall.then((response) => {
-      commit('handleResponse', { response });
+      commit('handleResponse', { response, commit });
       commit('restoreSecondsLeft');
       commit('setbusy', false);
     });
@@ -66,11 +68,13 @@ const mutations = {
   setbusy(state, busy) {
     state.requestBusy = busy;
   },
-  handleResponse(state, { response }) {
+  handleResponse(state, { response, commit }) {
     state.last_updated = response.data.last_updated;
     state.total_market_cap = response.data.total_market_cap;
     state.total_24h_volume = response.data.total_24h_volume;
-    state.bitcoin_percentage_of_market_cap = response.data.bitcoin_percentage_of_market_cap;
+    state.bitcoin_percentage = response.data.bitcoin_percentage;
+    state.history = response.data.history;
+    commit('setConfig', response.data.config);
   },
   restoreSecondsLeft(state) {
     state.secondsLeft = constants.state.checkEachMinutes * 60;

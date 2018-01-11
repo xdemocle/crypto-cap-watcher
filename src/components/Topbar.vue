@@ -35,13 +35,20 @@
                   {{theme}} theme
                 </v-list-tile-title>
               </v-list-tile>
-
               <v-list-tile>
                 <v-list-tile-action>
                   <v-switch v-model="fullscreenSwitch" color="green"></v-switch>
                 </v-list-tile-action>
                 <v-list-tile-title>
                   Fullscreen
+                </v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile v-for="(card, index) in timing" v-bind:key="index">
+                <v-list-tile-action>
+                  <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>
+                  {{card.label}}
                 </v-list-tile-title>
               </v-list-tile>
             </v-list>
@@ -85,6 +92,9 @@
 
   export default {
     name: 'Topbar',
+    data: () => ({
+      fadeToggle: false
+    }),
     computed: {
       themeSwitch: {
         get() {
@@ -122,11 +132,20 @@
       },
       lastUpdate() {
         return store.state.history.last_updated;
+      },
+      timing() {
+        if (!store.state.settings.config) {
+          return null;
+        }
+        return store.state.settings.config.timing;
       }
     },
     methods: {
       refreshData() {
         return this.$store.dispatch('getdata');
+      },
+      toggleCardVisibility(id) {
+        this.$store.dispatch('updateConfigTiming', id);
       }
     }
   };
