@@ -2,9 +2,13 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill';
 import Vue from 'vue';
-import Vuex from 'vuex';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import Vuetify from 'vuetify';
 import VueMoment from 'vue-moment';
+import VueCurrencyFilter from 'vue-currency-filter';
+import moment from 'moment-timezone';
+import fullscreen from 'vue-fullscreen';
 
 // Helpers
 import colors from 'vuetify/es5/util/colors';
@@ -13,10 +17,19 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-require('vuetify/dist/vuetify.min.css');
-
-Vue.use(Vuex);
-Vue.use(VueMoment);
+Vue.use(VueAxios, axios);
+Vue.use(VueCurrencyFilter, {
+  symbol: '$',
+  thousandsSeparator: ',',
+  fractionCount: 0,
+  fractionSeparator: '.',
+  symbolPosition: 'front',
+  symbolSpacing: false
+});
+Vue.use(VueMoment, {
+  moment
+});
+Vue.use(fullscreen);
 
 Vue.use(Vuetify, {
   theme: {
@@ -26,7 +39,7 @@ Vue.use(Vuetify, {
   }
 });
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = process.env.NODE_ENV;
 
 /* eslint-disable no-new */
 new Vue({

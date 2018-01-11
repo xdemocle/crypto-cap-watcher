@@ -2,12 +2,14 @@
 
 // initial state
 const state = {
-  theme: true
+  theme: true,
+  fullscreen: false
 };
 
 // getters
 const getters = {
-  theme: state => state.theme
+  theme: state => state.theme,
+  fullscreen: state => state.fullscreen
 };
 
 // actions
@@ -17,6 +19,9 @@ const actions = {};
 const mutations = {
   switchTheme(state) {
     state.theme = !state.theme;
+  },
+  switchFullscreen(state) {
+    state.fullscreen = !state.fullscreen;
   }
 };
 

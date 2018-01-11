@@ -1,89 +1,30 @@
 <template>
   <v-app id="app" :dark="theme">
-
     <topbar></topbar>
-
-    <main>
+    <main class="mb-5">
       <v-content>
         <router-view></router-view>
-        
-        <!-- 
-        <section>
-          <v-container grid-list-xl>
-            <v-layout row wrap justify-center class="my-5">
-              <v-flex xs12 sm4>
-                <v-card class="elevation-0 transparent">
-                  <v-card-title primary-title class="layout justify-center">
-                    <div class="headline">Company info</div>
-                  </v-card-title>
-                  <v-card-text>
-                    Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-                  </v-card-text>
-                </v-card>
-              </v-flex>
-              <v-flex xs12 sm4 offset-sm1>
-                <v-card class="elevation-0 transparent">
-                  <v-card-title primary-title class="layout justify-center">
-                    <div class="headline">Contact us</div>
-                  </v-card-title>
-                  <v-card-text>
-                    Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                  </v-card-text>
-                  <v-list class="transparent">
-                    <v-list-tile>
-                      <v-list-tile-action>
-                        <v-icon class="blue--text text--lighten-2">phone</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>+27 777 867 5309</v-list-tile-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                      <v-list-tile-action>
-                        <v-icon class="blue--text text--lighten-2">place</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>Cape Town, ZA</v-list-tile-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                      <v-list-tile-action>
-                        <v-icon class="blue--text text--lighten-2">email</v-icon>
-                      </v-list-tile-action>
-                      <v-list-tile-content>
-                        <v-list-tile-title>Send a message</v-list-tile-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </section> -->
       </v-content>
     </main>
-    
     <bottombar></bottombar>
-
   </v-app>
 </template>
 
 <script>
+  import constants from '@/store/modules/constants';
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
 
   export default {
-    data: () => ({
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'About', icon: 'question_answer' }
-      ]
-    }),
-    props: {
-      source: String
-    },
+    // data: () => ({
+    //   items: [
+    //     { title: 'Home', icon: 'dashboard' },
+    //     { title: 'About', icon: 'question_answer' }
+    //   ]
+    // }),
+    // props: {
+    //   source: String
+    // },
     computed: {
       theme() {
         return this.$store.state.settings.theme;
@@ -93,25 +34,66 @@
       Topbar,
       Bottombar
     },
-    methods: {
-      updateClock() {
-        return this.$store.dispatch('updateClock');
-      }
+    created() {
+      const that = this;
+
+      // First data retrieve
+      this.getdata().then(() => {
+        // Run at interval a new request
+        window.setInterval(that.getdata, constants.state.checkEachMinutes * 60 * 1000);
+        window.setInterval(that.updateSecondsLeft, 1000);
+      });
     },
-    mounted() {
-      this.updateClock();
-      window.setInterval(this.updateClock, 1000);
+    methods: {
+      // updateClock() {
+      //   return this.$store.dispatch('updateClock');
+      // },
+      updateSecondsLeft() {
+        return this.$store.dispatch('updateSecondsLeft');
+      },
+      getdata() {
+        return this.$store.dispatch('getdata');
+      }
     }
+    // mounted() {
+    //   this.updateClock();
+    //   window.setInterval(this.updateClock, 1000);
+    // }
   };
 </script>
 
 <style lang="scss">
-.app {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  // color: #2c3e50;
-  // margin-top: 25vh;
-  // text-align: center;
-}
+  .dynamic-placeholder {
+    transition: opacity 0.25s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    opacity: 1;
+  }
+
+  .opa-a {
+    opacity: 0;
+  }
+</style>
+
+<style lang="stylus">
+  @import '_variables'
+  @import '~vuetify/src/stylus/main'
+  @import '_modifier'
+
+  html
+    font-size: 10px
+
+  @media $display-breakpoints.sm-and-up
+    html
+      font-size: 12px
+
+  @media $display-breakpoints.md-and-up
+    html
+      font-size: 13px
+
+  @media $display-breakpoints.lg-and-up
+    html
+      font-size: 14px
+
+  @media $display-breakpoints.xl-only
+    html
+      font-size: 16px
 </style>
