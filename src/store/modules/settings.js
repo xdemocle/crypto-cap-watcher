@@ -48,8 +48,9 @@ const mutations = {
     state.fullscreen = !state.fullscreen;
   },
   setConfig(state, { response, callback }) {
+    const checkEachMinutes = response.data.checkEachMinutes;
     state.config = _.merge(response.data, state.config);
-    state.config.checkEachMinutes = response.data.checkEachMinutes;
+    state.config.checkEachMinutes = checkEachMinutes;
 
     if (callback) {
       callback();
