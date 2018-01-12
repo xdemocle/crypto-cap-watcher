@@ -48,6 +48,7 @@ const mutations = {
     state.fullscreen = !state.fullscreen;
   },
   setConfig(state, { response, callback }) {
+    state.config = _.merge(response.data, state.config);
     state.config.checkEachMinutes = response.data.checkEachMinutes;
 
     if (callback) {
@@ -56,7 +57,6 @@ const mutations = {
   },
   setTimingWrapper(state, { index, visible }) {
     state.config.timing[index].visible = visible;
-    state.config = state.config;
   }
 };
 

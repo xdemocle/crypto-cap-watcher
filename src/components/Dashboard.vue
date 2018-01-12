@@ -152,11 +152,11 @@
       toggleCardVisibility(id) {
         this.$store.dispatch('updateConfigTiming', id);
       },
-      getColor(arrow) {
-        return arrow === 'down' ? 'red' : 'green';
+      getColor(direction) {
+        return direction === 'down' ? 'red' : 'green';
       },
-      getClass(arrow) {
-        return arrow === 'down' ? 'red--text' : 'green--text';
+      getClass(direction) {
+        return direction === 'down' ? 'red--text' : 'green--text';
       },
       getLabel(id) {
         return _.find(store.state.settings.config.timing, { id }).label;
