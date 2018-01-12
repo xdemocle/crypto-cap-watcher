@@ -5,6 +5,7 @@ import Vue from 'vue';
 const state = {
   name: 'Crypto Cap Watcher',
   checkEachMinutes: 5,
+  secondsThrottling: 30,
   apiUrl() {
     let apiUrl = null;
 

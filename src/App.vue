@@ -11,20 +11,12 @@
 </template>
 
 <script>
-  import constants from '@/store/modules/constants';
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
 
+  let intervalChecker = null;
+
   export default {
-    // data: () => ({
-    //   items: [
-    //     { title: 'Home', icon: 'dashboard' },
-    //     { title: 'About', icon: 'question_answer' }
-    //   ]
-    // }),
-    // props: {
-    //   source: String
-    // },
     computed: {
       theme() {
         return this.$store.state.settings.theme;
@@ -35,30 +27,20 @@
       Bottombar
     },
     created() {
-      const that = this;
-
-      // First data retrieve
-      this.getdata().then(() => {
-        // Run at interval a new request
-        window.setInterval(that.getdata, constants.state.checkEachMinutes * 60 * 1000);
-        window.setInterval(that.updateSecondsLeft, 1000);
-      });
+      if (!intervalChecker) {
+        intervalChecker = window.setInterval(this.updateSecondsLeft, 1000);
+      }
     },
     methods: {
-      // updateClock() {
-      //   return this.$store.dispatch('updateClock');
-      // },
       updateSecondsLeft() {
+        // Run at interval a new request
+        if (this.$store.state.history.secondsLeft <= 1) {
+          return this.$store.dispatch('getdata');
+        }
+
         return this.$store.dispatch('updateSecondsLeft');
-      },
-      getdata() {
-        return this.$store.dispatch('getdata');
       }
     }
-    // mounted() {
-    //   this.updateClock();
-    //   window.setInterval(this.updateClock, 1000);
-    // }
   };
 </script>
 

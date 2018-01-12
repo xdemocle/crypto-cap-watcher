@@ -73,19 +73,25 @@
             <v-card-text>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{card.total_market_cap | currency}}<v-icon color="red">arrow_downward</v-icon>
+                  {{card.total_market_cap | currency}}<v-icon
+                    :color="getColor(card.total_market_cap_arrow)">arrow_{{card.total_market_cap_arrow}}ward</v-icon
+                  ><span class="subheading" :class="getClass(card.total_market_cap_arrow)">{{card.total_market_cap_perc}}%</span>
                 </div>
                 Global Market Cap
               </div>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{card.total_24h_volume | currency}}<v-icon color="red">arrow_downward</v-icon>
+                  {{card.total_24h_volume | currency}}<v-icon
+                    :color="getColor(card.total_24h_volume_arrow)">arrow_{{card.total_24h_volume_arrow}}ward</v-icon
+                  ><span class="subheading" :class="getClass(card.total_24h_volume_arrow)">{{card.total_24h_volume_perc}}%</span>
                 </div>
                 24h Global Market Volume
               </div>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{card.bitcoin_percentage}}%<v-icon color="green">arrow_upward</v-icon>
+                  {{card.bitcoin_percentage}}%<v-icon
+                    :color="getColor(card.bitcoin_percentage_arrow)">arrow_{{card.bitcoin_percentage_arrow}}ward</v-icon
+                  ><span class="subheading" :class="getClass(card.bitcoin_percentage_arrow)">{{card.bitcoin_percentage_perc}}%</span>
                 </div>
                 Bitcoin Dominance
               </div>
@@ -142,6 +148,12 @@
       },
       toggleCardVisibility(id) {
         this.$store.dispatch('updateConfigTiming', id);
+      },
+      getColor(arrow) {
+        return arrow === 'down' ? 'red' : 'green';
+      },
+      getClass(arrow) {
+        return arrow === 'down' ? 'red--text' : 'green--text';
       }
     }
   };

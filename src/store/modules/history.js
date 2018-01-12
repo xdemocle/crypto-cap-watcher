@@ -4,7 +4,6 @@ import constants from './constants';
 
 // initial state
 const state = {
-  lastRequest: null,
   requestBusy: false,
   secondsLeft: 0,
   last_updated: null,
@@ -16,7 +15,6 @@ const state = {
 
 // getters
 const getters = {
-  lastRequest: state => state.lastRequest,
   requestBusy: state => state.requestBusy,
   secondsLeft: state => state.secondsLeft,
   last_updated: state => state.last_updated,
@@ -31,10 +29,6 @@ const getters = {
 // actions
 const actions = {
   getdata({ commit }) {
-    // TODO: add throttling for limiting number of requests
-    // if (state.lastRequest) {
-    // }
-
     commit('setbusy', true);
 
     const url = [constants.state.apiUrl(), '/statistics'].join('');
@@ -42,7 +36,7 @@ const actions = {
 
     ajaxCall.then((response) => {
       commit('handleResponse', { response, commit });
-      commit('restoreSecondsLeft');
+      commit('setSecondsLeft');
       commit('setbusy', false);
     });
 
@@ -52,14 +46,12 @@ const actions = {
     let secondsLeft = state.secondsLeft;
 
     if (secondsLeft < 1) {
-      return commit('restoreSecondsLeft');
+      return commit('setSecondsLeft');
     }
 
     secondsLeft -= 1;
 
-    commit('setSecondsLeft', secondsLeft);
-
-    return null;
+    return commit('setSecondsLeft', secondsLeft);
   }
 };
 
@@ -76,11 +68,15 @@ const mutations = {
     state.history = response.data.history;
     commit('setConfig', response.data.config);
   },
-  restoreSecondsLeft(state) {
-    state.secondsLeft = constants.state.checkEachMinutes * 60;
-  },
   setSecondsLeft(state, seconds) {
-    state.secondsLeft = seconds;
+    let realSeconds = seconds;
+
+    // if no seconds param passed we overwrite the realSeconds var
+    if (!seconds) {
+      realSeconds = constants.state.checkEachMinutes * 60;
+    }
+
+    state.secondsLeft = realSeconds;
   }
 };
 
