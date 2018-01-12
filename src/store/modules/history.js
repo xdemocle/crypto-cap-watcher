@@ -1,6 +1,7 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
 import constants from './constants';
+// import settings from './settings';
 
 // initial state
 const state = {
@@ -28,7 +29,15 @@ const getters = {
 
 // actions
 const actions = {
-  getdata({ commit }) {
+  getdata({ commit, state, rootState }) {
+    const secondsPassed = (rootState.settings.config.checkEachMinutes * 60) -
+      state.secondsLeft;
+
+    // Add throttling for limiting number of requests
+    if (secondsPassed <= rootState.constants.secondsThrottling && secondsPassed >= 0) {
+      return 'throttling';
+    }
+
     commit('setbusy', true);
 
     const url = [constants.state.apiUrl(), '/statistics'].join('');
@@ -36,22 +45,22 @@ const actions = {
 
     ajaxCall.then((response) => {
       commit('handleResponse', { response, commit });
-      commit('setSecondsLeft');
+      commit('setSecondsLeft', { rootState });
       commit('setbusy', false);
     });
 
     return ajaxCall;
   },
-  updateSecondsLeft({ commit, state }) {
-    let secondsLeft = state.secondsLeft;
+  updateSecondsLeft({ commit, state, rootState }) {
+    let seconds = state.secondsLeft;
 
-    if (secondsLeft < 1) {
-      return commit('setSecondsLeft');
+    if (seconds < 1) {
+      return commit('setSecondsLeft', { rootState });
     }
 
-    secondsLeft -= 1;
+    seconds -= 1;
 
-    return commit('setSecondsLeft', secondsLeft);
+    return commit('setSecondsLeft', { rootState, seconds });
   }
 };
 
@@ -60,20 +69,19 @@ const mutations = {
   setbusy(state, busy) {
     state.requestBusy = busy;
   },
-  handleResponse(state, { response, commit }) {
+  handleResponse(state, { response }) {
     state.last_updated = response.data.last_updated;
     state.total_market_cap = response.data.total_market_cap;
     state.total_24h_volume = response.data.total_24h_volume;
     state.bitcoin_percentage = response.data.bitcoin_percentage;
     state.history = response.data.history;
-    commit('setConfig', response.data.config);
   },
-  setSecondsLeft(state, seconds) {
+  setSecondsLeft(state, { rootState, seconds }) {
     let realSeconds = seconds;
 
     // if no seconds param passed we overwrite the realSeconds var
     if (!seconds) {
-      realSeconds = constants.state.checkEachMinutes * 60;
+      realSeconds = rootState.settings.config.checkEachMinutes * 60;
     }
 
     state.secondsLeft = realSeconds;

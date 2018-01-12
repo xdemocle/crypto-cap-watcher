@@ -146,16 +146,9 @@
     },
     methods: {
       refreshData() {
-        const secondsPassed = (this.$store.state.constants.checkEachMinutes * 60) -
-          this.$store.state.history.secondsLeft;
-
-        // Add throttling for limiting number of requests
-        if (secondsPassed <= this.$store.state.constants.secondsThrottling) {
-          this.throttlingDialog = true;
-          return null;
-        }
-
-        return this.$store.dispatch('getdata');
+        this.$store.dispatch('getdata', true).then((response) => {
+          this.throttlingDialog = response === 'throttling' || false;
+        });
       },
       toggleCardVisibility(id) {
         this.$store.dispatch('updateConfigTiming', id);

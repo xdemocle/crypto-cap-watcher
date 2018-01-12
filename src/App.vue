@@ -27,9 +27,15 @@
       Bottombar
     },
     created() {
-      if (!intervalChecker) {
-        intervalChecker = window.setInterval(this.updateSecondsLeft, 1000);
-      }
+      const that = this;
+
+      // First get remote settings than start the setInterval for updating local
+      // data from history and seconds left from next request.
+      this.$store.dispatch('getsettings', () => {
+        if (!intervalChecker) {
+          intervalChecker = window.setInterval(that.updateSecondsLeft, 1000);
+        }
+      });
     },
     methods: {
       updateSecondsLeft() {

@@ -1,11 +1,13 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
+import Vue from 'vue';
 import _ from 'lodash';
+import constants from './constants';
 
 // initial state
 const state = {
   theme: true,
   fullscreen: false,
-  config: null
+  config: {}
 };
 
 // getters
@@ -24,6 +26,16 @@ const actions = {
     const visible = !timing[index].visible;
 
     commit('setTimingWrapper', { index, visible });
+  },
+  getsettings({ commit }, callback) {
+    const url = [constants.state.apiUrl(), '/settings'].join('');
+    const ajaxCall = Vue.axios.get(url);
+
+    ajaxCall.then((response) => {
+      commit('setConfig', { response, callback });
+    });
+
+    return ajaxCall;
   }
 };
 
@@ -35,8 +47,12 @@ const mutations = {
   switchFullscreen(state) {
     state.fullscreen = !state.fullscreen;
   },
-  setConfig(state, config) {
-    state.config = _.merge(config, state.config);
+  setConfig(state, { response, callback }) {
+    state.config.checkEachMinutes = response.data.checkEachMinutes;
+
+    if (callback) {
+      callback();
+    }
   },
   setTimingWrapper(state, { index, visible }) {
     state.config.timing[index].visible = visible;

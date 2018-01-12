@@ -96,7 +96,7 @@
                 Bitcoin Dominance
               </div>
               <div class="pt-1 pb-0 mb-0">
-                <div class="title ellipsis">{{card.label}}</div>
+                <div class="title ellipsis">{{getLabel(card.id)}}</div>
               </div>
             </v-card-text>
           </v-card>
@@ -136,12 +136,15 @@
         return store.state.history.last_updated;
       },
       showCardsHint() {
+        if (!store.state.settings.config || !store.state.settings.config.timing) {
+          return false;
+        }
         return !_.find(store.state.settings.config.timing, { visible: true });
       }
     },
     methods: {
       cardVisibility(id) {
-        if (!store.state.settings.config) {
+        if (!store.state.settings.config || !store.state.settings.config.timing) {
           return true;
         }
         return _.find(store.state.settings.config.timing, { id }).visible;
@@ -154,6 +157,9 @@
       },
       getClass(arrow) {
         return arrow === 'down' ? 'red--text' : 'green--text';
+      },
+      getLabel(id) {
+        return _.find(store.state.settings.config.timing, { id }).label;
       }
     }
   };
