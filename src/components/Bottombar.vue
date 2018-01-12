@@ -5,7 +5,7 @@
         <p class="mb-0 text-muted">Interface will be updated in {{counterSeconds}} seconds</p>
       </v-flex>
       <v-flex xs12 sm6 class="text-xs-center text-sm-right ellipsis">
-        <p class="mb-0 text-muted">Data served by <a href="https://coinmarketcap.com" target="_blank">coinmarketcap.com</a> and stored in your browser</p>
+        <p class="mb-0 text-muted">Data served by <a href="https://coinmarketcap.com" target="_blank">coinmarketcap.com</a></p>
       </v-flex>
     </v-layout>
   </v-footer>
