@@ -63,11 +63,19 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
-      template: 'index.html',
-      inject: true,
+      // filename: process.env.NODE_ENV === 'testing'
+      //   ? 'index.html'
+      //   : config.build.index,
+      // template: 'index.html',
+      template: require('html-webpack-template'),
+      inject: false,
+      mobile: true,
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      ],
+      appMountId: 'app',
+      // appMountHtmlSnippet: '<div id="app"></div>',
+      title: env.title,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -75,6 +83,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
+      headHtmlSnippet: env.headHtmlSnippet,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),

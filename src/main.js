@@ -41,6 +41,8 @@ Vue.use(Vuetify, {
 
 Vue.config.productionTip = process.env.NODE_ENV;
 
+window.Vue = Vue;
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

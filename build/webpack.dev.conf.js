@@ -10,6 +10,7 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+const env = require('../config/dev.env')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -46,9 +47,17 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
+      // filename: 'index.html',
+      // template: 'index.html',
+      template: require('html-webpack-template'),
+      inject: false,
+      mobile: true,
+      appMountId: 'app',
+      // appMountHtmlSnippet: '<div id="app"></div>',
+      title: env.title,
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      ],
     })
   ]
 })
