@@ -64,7 +64,7 @@
         </v-flex>
       </v-scale-transition>
 
-      <v-scale-transition v-for="(card, index) in history" v-bind:key="index">
+      <v-scale-transition v-for="(card, index) in historySorted" v-bind:key="index">
         <v-flex xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)">
           <v-card class="py-3">
             <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down">
@@ -125,6 +125,9 @@
         total24hVol: 'total_24h_volume',
         history: 'history'
       }),
+      historySorted() {
+        return _.orderBy(this.history, 'id');
+      },
       lastUpdate() {
         const that = this;
         this.fadeToggle = true;
