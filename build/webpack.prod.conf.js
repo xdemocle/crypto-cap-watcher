@@ -75,7 +75,12 @@ const webpackConfig = merge(baseWebpackConfig, {
       ],
       appMountId: 'app',
       // appMountHtmlSnippet: '<div id="app"></div>',
-      title: env.title,
+      title: env.title,meta: [
+        {
+          name: 'description',
+          content: 'A tool for monitoring the crypto currencies global market capitalitation, daily global volume of exchangers and bitcoin dominance over the market'
+        }
+      ],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
