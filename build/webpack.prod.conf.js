@@ -71,7 +71,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       inject: false,
       mobile: true,
       links: [
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
+        {
+          href: '/static/favicon-32x32.png',
+          rel: 'icon',
+          sizes: '32x32',
+          type: 'image/png'
+        }
       ],
       appMountId: 'app',
       // appMountHtmlSnippet: '<div id="app"></div>',
