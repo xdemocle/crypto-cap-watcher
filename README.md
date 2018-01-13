@@ -2,6 +2,8 @@
 
 > Crypto Cap Watcher
 
+[![Build Status](https://semaphoreci.com/api/v1/xdemocle/crypto-cap-watcher/branches/master/badge.svg)](https://semaphoreci.com/xdemocle/crypto-cap-watcher)
+
 ## Build Setup
 
 ``` bash
