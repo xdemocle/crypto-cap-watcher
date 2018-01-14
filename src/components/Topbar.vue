@@ -54,22 +54,30 @@
                     Fullscreen
                   </v-list-tile-title>
                 </v-list-tile>
-
-                <v-divider></v-divider>
-
-                <v-list-tile v-for="(card, index) in timing" v-bind:key="index">
-                  <v-list-tile-action>
-                    <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green"></v-switch>
-                  </v-list-tile-action>
-                  <v-list-tile-title>
-                    {{card.label}}
-                  </v-list-tile-title>
+              </v-list>
+              <v-divider></v-divider>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title>
+                      <span class="title">Changes</span>
+                    </v-list-tile-title>
+                  </v-list-tile-content>
                 </v-list-tile>
               </v-list>
+              <v-layout
+                wrap
+                align-center
+                fluid
+                style="max-width: 310px">
+                <v-flex xs6 class="pl-3 pr-3 heading" v-for="(card, index) in timing" v-bind:key="index">
+                  <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.shortLabel"></v-switch>
+                </v-flex>
+              </v-layout>
             </v-card>
           </v-menu>
         </v-flex>
-        <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="request-progress"></v-progress-linear>
+        <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
       </v-layout>
     </v-toolbar>
 
@@ -157,8 +165,8 @@
   };
 </script>
 
-<style type="scss" scoped>
-  .request-progress {
+<style>
+  .topbar-request-progress {
     position: absolute;
     bottom: 0;
     margin: 0;
