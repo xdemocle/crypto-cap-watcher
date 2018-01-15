@@ -159,7 +159,12 @@
         return store.state.tickers.updates;
       },
       bitcoinPriceClass() {
-        const flag = Number(this.bitcoinPrice.FLAGS);
+        let flag = 4;
+
+        if (this.bitcoinPrice && this.bitcoinPrice.FLAGS) {
+          flag = Number(this.bitcoinPrice.FLAGS);
+        }
+
         return {
           'green--text': flag === 1 || flag === 4,
           'red--text': flag === 2
