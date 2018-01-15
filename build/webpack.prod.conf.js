@@ -81,13 +81,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       ],
       appMountId: 'app',
       // appMountHtmlSnippet: '<div id="app"></div>',
-      title: 'Crypto Cap Watcher',
+      title: 'Crypto Cap Watcher | A tool for monitoring crypto currencies global market capitalization and Bitcoin data',
       meta: [
         {
           name: 'description',
           content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
         }
       ],
+      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript>',
       headHtmlSnippet: '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,

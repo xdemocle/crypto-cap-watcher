@@ -1,8 +1,6 @@
 # crypto-cap-watcher
 
-> Crypto Cap Watcher
-
-Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.
+> Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.
 
 [![Build Status](https://semaphoreci.com/api/v1/xdemocle/crypto-cap-watcher/branches/master/badge.svg)](https://semaphoreci.com/xdemocle/crypto-cap-watcher)
 

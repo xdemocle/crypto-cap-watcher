@@ -44,11 +44,6 @@ const mutations = {
         const updates = CCC.STATIC.UTIL.dataUnpack(res);
 
         state.updates = _.merge(state.updates, updates);
-
-        // if (!_.isUndefined(updates.PRICE)) {
-        // if (updates.FLAGS !== '4') {
-        //   state.updates = updates;
-        // }
       }
     }
   }

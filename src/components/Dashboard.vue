@@ -32,7 +32,7 @@
             <div class="flex">
               <span class="display-3" v-bind:class="bitcoinPriceClass">{{bitcoinPrice.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
               <v-tooltip top class="d-inline-block">
-                <div class="flex align-center green--text ml-2" slot="activator" :class="{'green--text': bitcoinPriceArrow24Hour == 'up', 'red--text': bitcoinPriceArrow24Hour == 'down'}">
+                <div class="flex align-center ml-2" slot="activator" :class="{'green--text': bitcoinPriceArrow24Hour == 'up', 'red--text': bitcoinPriceArrow24Hour == 'down'}">
                   <v-icon class="text-xs-center" style="line-height: 1rem;font-size: 5rem;width: 2rem;" :color="bitcoinPriceArrow24Hour == 'up' ? 'green' : 'red'">arrow_drop_{{bitcoinPriceArrow24Hour}}</v-icon>
                   <span class="d-flex title">{{bitcoinPrice.CHANGE24HOURPCT}}%</span>
                 </div>
