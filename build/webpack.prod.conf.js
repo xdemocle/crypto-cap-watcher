@@ -81,12 +81,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       ],
       appMountId: 'app',
       // appMountHtmlSnippet: '<div id="app"></div>',
-      title: env.title,meta: [
+      title: 'Crypto Cap Watcher',
+      meta: [
         {
           name: 'description',
-          content: 'A tool for monitoring the crypto currencies global market capitalitation, daily global volume of exchangers and bitcoin dominance over the market'
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
         }
       ],
+      headHtmlSnippet: '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -94,7 +96,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      headHtmlSnippet: env.headHtmlSnippet,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),

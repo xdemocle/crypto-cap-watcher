@@ -3,10 +3,10 @@
     <v-layout
       row
       wrap
-      align-center
+      fill-height
       fluid>
 
-      <v-flex xs12 sm6 md4 px-2 py-2>
+      <v-flex d-flex xs12 sm6 md4 px-2 py-2>
         <v-card class="py-3">
           <v-card-text class="text-xs-center">
             <v-icon x-large>monetization_on</v-icon>
@@ -15,24 +15,35 @@
             <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{totalMarketCap | currency}}</div>
           </v-card-text>
           <v-card-text>
-            <div class="title ellipsis">Global Market Capitalization</div>
+            <div class="title ellipsis" title="Global Market Capitalization">Global Market Capitalization</div>
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm6 md4 px-2 py-2>
+      <v-flex d-flex xs12 sm6 md4 px-2 py-2>
         <v-card class="py-3">
-          <v-card-text class="text-xs-center">
+          <!-- <v-card-text class="text-xs-center">
             <v-icon x-large>pie_chart_outlined</v-icon>
+          </v-card-text> -->
+          <v-card-text class="py-1">
+            <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
+            <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Dominance</div>
           </v-card-text>
           <v-card-text>
-            <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
-          </v-card-text>
-          <v-card-text>
-            <div class="title ellipsis">Bitcoin Dominance</div>
+            <div class="flex">
+              <span class="display-3" v-bind:class="bitcoinPriceClass">{{bitcoinPrice.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <v-tooltip top class="d-inline-block">
+                <div class="flex align-center green--text ml-2" slot="activator" :class="{'green--text': bitcoinPriceArrow24Hour == 'up', 'red--text': bitcoinPriceArrow24Hour == 'down'}">
+                  <v-icon class="text-xs-center" style="line-height: 1rem;font-size: 5rem;width: 2rem;" :color="bitcoinPriceArrow24Hour == 'up' ? 'green' : 'red'">arrow_drop_{{bitcoinPriceArrow24Hour}}</v-icon>
+                  <span class="d-flex title">{{bitcoinPrice.CHANGE24HOURPCT}}%</span>
+                </div>
+                <span>24 Hours Price difference</span>
+              </v-tooltip>
+            </div>
+            <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Price Real-time</div>
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm12 md4 px-2 py-2>
+      <v-flex d-flex xs12 sm12 md4 px-2 py-2>
         <v-card class="py-3">
           <v-card-text class="text-xs-center">
             <v-icon x-large>timelapse</v-icon>
@@ -41,7 +52,7 @@
             <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{total24hVol | currency}}</div>
           </v-card-text>
           <v-card-text>
-            <div class="title ellipsis">24h Global Market Volume</div>
+            <div class="title ellipsis" title="24h Global Market Volume">24h Global Market Volume</div>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -65,8 +76,8 @@
       </v-scale-transition>
 
       <v-scale-transition v-for="(card, index) in historySorted" v-bind:key="index">
-        <v-flex xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)">
-          <v-card class="py-3">
+        <v-flex xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)" style="display: flex;">
+          <v-card class="py-3" width="100%">
             <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down">
               <v-icon>close</v-icon>
             </v-btn>
@@ -143,6 +154,19 @@
           return false;
         }
         return !_.find(store.state.settings.config.timing, { visible: true });
+      },
+      bitcoinPrice() {
+        return store.state.tickers.updates;
+      },
+      bitcoinPriceClass() {
+        const flag = Number(this.bitcoinPrice.FLAGS);
+        return {
+          'green--text': flag === 1 || flag === 4,
+          'red--text': flag === 2
+        };
+      },
+      bitcoinPriceArrow24Hour() {
+        return this.bitcoinPrice.CHANGE24HOURPCT > 0 ? 'up' : 'down';
       }
     },
     methods: {

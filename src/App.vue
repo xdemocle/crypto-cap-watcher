@@ -29,8 +29,14 @@
     created() {
       const that = this;
 
+      // Subsribe to cryptocompare websocket for bitcoin price
+      this.$socket.emit('SubAdd', { subs: ['5~CCCAGG~BTC~USD'] });
+
+      // Always restore fullscreen flag at bootstrap
+      this.$store.commit('resetFullscreen');
+
       // First get remote settings than start the setInterval for updating local
-      // data from history and seconds left from next request.
+      // data from history and secondsLeft from next request.
       this.$store.dispatch('getsettings', () => {
         if (!intervalChecker) {
           intervalChecker = window.setInterval(that.updateSecondsLeft, 1000);

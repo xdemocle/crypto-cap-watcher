@@ -2,9 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import constants from './modules/constants';
-// import clock from './modules/clock';
-import settings from './modules/settings';
 import history from './modules/history';
+import settings from './modules/settings';
+import tickers from './modules/tickers';
 
 const _ = require('lodash');
 
@@ -19,7 +19,7 @@ const storeOptions = {
     const keys = Object.keys(store);
 
     _.each(keys, (key) => {
-      if (key === 'constants' || key === 'clock') {
+      if (key === 'constants') {
         return;
       }
 
@@ -33,9 +33,9 @@ const storeOptions = {
 export default new Vuex.Store({
   modules: {
     constants,
-    // clock,
+    history,
     settings,
-    history
+    tickers
   },
   plugins: [createPersistedState(storeOptions)],
   strict: debug

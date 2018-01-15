@@ -1,7 +1,7 @@
 {
   "name": "crypto-cap-watcher",
   "version": "1.0.0",
-  "description": "Crypto Cap Watcher",
+  "description": "Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.",
   "author": "xdemocle <xdemocle@gmail.com>",
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -68,9 +68,10 @@
     "selenium-server": "^3.0.1",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
+    "socket.io-client": "^2.0.4",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "uglifyjs-webpack-plugin": "^1.1.1",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.5.8",
     "vue": "^2.5.2",
     "vue-axios": "^2.0.2",
@@ -80,6 +81,7 @@
     "vue-loader": "^13.3.0",
     "vue-moment": "^3.1.0",
     "vue-router": "^3.0.1",
+    "vue-socket.io": "^2.1.1-b",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
     "vuetify": "^1.0.0-alpha.3",

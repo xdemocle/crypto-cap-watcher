@@ -4,6 +4,8 @@ import 'babel-polyfill';
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import socketio from 'socket.io-client';
+import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import VueMoment from 'vue-moment';
 import VueCurrencyFilter from 'vue-currency-filter';
@@ -17,7 +19,10 @@ import App from './App';
 import router from './router';
 import store from './store';
 
+Vue.use(VueSocketio, socketio('https://streamer.cryptocompare.com'), store);
+
 Vue.use(VueAxios, axios);
+
 Vue.use(VueCurrencyFilter, {
   symbol: '$',
   thousandsSeparator: ',',
@@ -26,9 +31,11 @@ Vue.use(VueCurrencyFilter, {
   symbolPosition: 'front',
   symbolSpacing: false
 });
+
 Vue.use(VueMoment, {
   moment
 });
+
 Vue.use(fullscreen);
 
 Vue.use(Vuetify, {

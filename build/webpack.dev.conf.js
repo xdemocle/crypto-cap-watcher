@@ -54,10 +54,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       mobile: true,
       appMountId: 'app',
       // appMountHtmlSnippet: '<div id="app"></div>',
-      title: env.title,
+      title: 'Crypto Cap Watcher',
       links: [
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       ],
+      meta: [],
+      headHtmlSnippet: ''
     })
   ]
 })
