@@ -241,7 +241,7 @@
       priceArrow24Hour(symbol) {
         const coin = store.state.tickers.updates[symbol];
 
-        if (!coin || !coin.CHANGE24HOURPCT || !coin.percent_change_24h) {
+        if (!coin || (!coin.CHANGE24HOURPCT && !coin.percent_change_24h)) {
           return 'up';
         }
 
