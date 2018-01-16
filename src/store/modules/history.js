@@ -1,7 +1,6 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
 import constants from './constants';
-// import settings from './settings';
 
 // initial state
 const state = {

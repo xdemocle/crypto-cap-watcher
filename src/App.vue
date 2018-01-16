@@ -30,7 +30,15 @@
       const that = this;
 
       // Subsribe to cryptocompare websocket for bitcoin price
-      this.$socket.emit('SubAdd', { subs: ['5~CCCAGG~BTC~USD'] });
+      this.$socket.emit('SubAdd', {
+        subs: this.$store.state.constants.wsCccSubscriptions
+      });
+
+      this.$store.subscribeAction((action) => {
+        if (action.type === 'getdata') {
+          that.$store.dispatch('getTickerData', 'tether');
+        }
+      });
 
       // Always restore fullscreen flag at bootstrap
       this.$store.commit('resetFullscreen');

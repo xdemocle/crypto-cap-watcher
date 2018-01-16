@@ -6,59 +6,91 @@
       fill-height
       fluid>
 
-      <v-flex d-flex xs12 sm6 md4 px-2 py-2>
+      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
         <v-card class="py-3">
-          <v-card-text class="text-xs-center">
+          <v-card-text class="text-xs-center py-2">
             <v-icon x-large>monetization_on</v-icon>
           </v-card-text>
-          <v-card-text>
-            <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{totalMarketCap | currency}}</div>
+          <v-card-text class="py-2">
+            <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(totalMarketCap)}}</div>
           </v-card-text>
-          <v-card-text>
+          <v-card-text class="py-2">
             <div class="title ellipsis" title="Global Market Capitalization">Global Market Capitalization</div>
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex d-flex xs12 sm6 md4 px-2 py-2>
+      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
         <v-card class="py-3">
-          <!-- <v-card-text class="text-xs-center">
-            <v-icon x-large>pie_chart_outlined</v-icon>
-          </v-card-text> -->
-          <v-card-text class="py-1">
-            <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
-            <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Dominance</div>
-          </v-card-text>
-          <v-card-text>
-            <div class="flex">
-              <span class="display-3" v-bind:class="bitcoinPriceClass">{{bitcoinPrice.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
-              <v-tooltip top class="d-inline-block">
-                <div class="flex align-center ml-2" slot="activator" :class="{'green--text': bitcoinPriceArrow24Hour == 'up', 'red--text': bitcoinPriceArrow24Hour == 'down'}">
-                  <v-icon class="text-xs-center" style="line-height: 1rem;font-size: 5rem;width: 2rem;" :color="bitcoinPriceArrow24Hour == 'up' ? 'green' : 'red'">arrow_drop_{{bitcoinPriceArrow24Hour}}</v-icon>
-                  <span class="d-flex title">{{bitcoinPrice.CHANGE24HOURPCT}}%</span>
-                </div>
-                <span>24 Hours Price difference</span>
-              </v-tooltip>
-            </div>
-            <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Price Real-time</div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex d-flex xs12 sm12 md4 px-2 py-2>
-        <v-card class="py-3">
-          <v-card-text class="text-xs-center">
+          <v-card-text class="text-xs-center py-2">
             <v-icon x-large>timelapse</v-icon>
           </v-card-text>
-          <v-card-text>
-            <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{total24hVol | currency}}</div>
+          <v-card-text class="py-2">
+            <div class="display-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(total24hVol)}}</div>
           </v-card-text>
-          <v-card-text>
+          <v-card-text class="py-2">
             <div class="title ellipsis" title="24h Global Market Volume">24h Global Market Volume</div>
           </v-card-text>
         </v-card>
       </v-flex>
+      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
+        <v-card class="py-3">
+          <v-card-text class="py-2">
+            <div class="display-1 mb-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
+            <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Dominance</div>
+          </v-card-text>
+          <v-card-text class="py-2">
+            <div class="flex mb-2">
+              <span class="display-2" v-bind:class="priceClass('BTC')">{{bitcoin.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <v-tooltip top class="d-inline-block">
+                <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('BTC') == 'up', 'red--text': priceArrow24Hour('BTC') == 'down'}">
+                  <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('BTC') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('BTC')}}</v-icon>
+                  <span class="d-flex">{{bitcoin.CHANGE24HOURPCT}}%</span>
+                </div>
+                <span>24 Hours Price difference</span>
+              </v-tooltip>
+            </div>
+            <v-tooltip bottom>
+              <span slot="activator" class="title ellipsis">Bitcoin Price</span>
+              <span>Real-time price from Cryptocompare.com</span>
+            </v-tooltip>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex-auto-width content-vertical-center px-2 py-2 v-show="showTether">
+        <v-card class="py-3">
+          <v-card-text class="py-2">
+            <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(tether['24h_volume_usd'])}}</div>
+            <div class="title ellipsis">24h Tether Volume</div>
+          </v-card-text>
+          <v-card-text class="py-2">
+            <div class="flex mb-2">
+              <span class="display-2" v-bind:class="priceClass('USDT')">{{tether.price_usd | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <v-tooltip top class="d-inline-block">
+                <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('USDT') == 'up', 'red--text': priceArrow24Hour('USDT') == 'down'}">
+                  <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('USDT') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('USDT')}}</v-icon>
+                  <span class="d-flex">{{tether.percent_change_24h}}%</span>
+                </div>
+                <span>24 Hours Price difference</span>
+              </v-tooltip>
+            </div>
+            <v-tooltip bottom>
+              <span slot="activator" class="title ellipsis">USDT Price</span>
+              <span>Price from Coinmarketcap.com</span>
+            </v-tooltip>
+
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+    </v-layout>
+    <v-layout
+      row
+      wrap
+      fill-height
+      fluid>
 
       <v-scale-transition>
-        <v-flex xs12 sm6 md4 px-2 py-2 v-show="showCardsHint">
+        <v-flex xs12 sm3 md3 px-2 py-2 v-show="showCardsHint">
           <v-card class="py-3">
             <v-card-text>
               <div class="title">Restore Cards</div>
@@ -76,7 +108,7 @@
       </v-scale-transition>
 
       <v-scale-transition v-for="(card, index) in historySorted" v-bind:key="index">
-        <v-flex xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)" style="display: flex;">
+        <v-flex d-flex-auto-width xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)">
           <v-card class="py-3" width="100%">
             <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down">
               <v-icon>close</v-icon>
@@ -84,7 +116,7 @@
             <v-card-text>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{card.total_market_cap | currency}}<v-icon
+                  {{currencyDisplay(card.total_market_cap)}}<v-icon
                     :color="getColor(card.total_market_cap_arrow)">arrow_{{card.total_market_cap_arrow}}ward</v-icon
                   ><span class="subheading" :class="getClass(card.total_market_cap_arrow)">{{card.total_market_cap_perc}}%</span>
                 </div>
@@ -92,7 +124,7 @@
               </div>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{card.total_24h_volume | currency}}<v-icon
+                  {{currencyDisplay(card.total_24h_volume)}}<v-icon
                     :color="getColor(card.total_24h_volume_arrow)">arrow_{{card.total_24h_volume_arrow}}ward</v-icon
                   ><span class="subheading" :class="getClass(card.total_24h_volume_arrow)">{{card.total_24h_volume_perc}}%</span>
                 </div>
@@ -155,26 +187,26 @@
         }
         return !_.find(store.state.settings.config.timing, { visible: true });
       },
-      bitcoinPrice() {
-        return store.state.tickers.updates;
+      showTether() {
+        return store.state.settings.tether;
       },
-      bitcoinPriceClass() {
-        let flag = 4;
-
-        if (this.bitcoinPrice && this.bitcoinPrice.FLAGS) {
-          flag = Number(this.bitcoinPrice.FLAGS);
-        }
-
-        return {
-          'green--text': flag === 1 || flag === 4,
-          'red--text': flag === 2
-        };
+      bitcoin() {
+        return store.state.tickers.updates.BTC;
       },
-      bitcoinPriceArrow24Hour() {
-        return this.bitcoinPrice.CHANGE24HOURPCT > 0 ? 'up' : 'down';
+      tether() {
+        return store.state.tickers.updates.USDT;
       }
     },
     methods: {
+      currencyDisplay(value) {
+        const val = Number(value);
+
+        if (store.state.settings.showMillions) {
+          return [this.$options.filters.currency(val / 1000000), 'MM'].join('');
+        }
+
+        return this.$options.filters.currency(val);
+      },
       cardVisibility(id) {
         if (!store.state.settings.config || !store.state.settings.config.timing) {
           return true;
@@ -192,6 +224,31 @@
       },
       getLabel(id) {
         return _.find(store.state.settings.config.timing, { id }).label;
+      },
+      priceClass(symbol) {
+        let flag = 4;
+
+        const coin = store.state.tickers.updates[symbol];
+
+        if (coin && coin.FLAGS) {
+          flag = Number(coin.FLAGS);
+        } else if (coin.percent_change_24h) {
+          flag = coin.percent_change_24h < 0 ? 2 : 4;
+        }
+
+        return {
+          'green--text': flag === 1 || flag === 4,
+          'red--text': flag === 2
+        };
+      },
+      priceArrow24Hour(symbol) {
+        const coin = store.state.tickers.updates[symbol];
+
+        if (!coin) {
+          return 'up';
+        }
+
+        return (coin.CHANGE24HOURPCT || coin.percent_change_24h) < 0 ? 'down' : 'up';
       }
     }
   };

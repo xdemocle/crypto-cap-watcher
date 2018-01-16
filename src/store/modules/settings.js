@@ -7,6 +7,8 @@ import constants from './constants';
 const state = {
   theme: true,
   fullscreen: false,
+  tether: false,
+  showMillions: true,
   config: {}
 };
 
@@ -14,6 +16,8 @@ const state = {
 const getters = {
   theme: state => state.theme,
   fullscreen: state => state.fullscreen,
+  tether: state => state.tether,
+  showMillions: state => state.showMillions,
   config: state => state.config
 };
 
@@ -46,6 +50,12 @@ const mutations = {
   },
   switchFullscreen(state) {
     state.fullscreen = !state.fullscreen;
+  },
+  switchTether(state) {
+    state.tether = !state.tether;
+  },
+  switchShowMillions(state) {
+    state.showMillions = !state.showMillions;
   },
   resetFullscreen(state) {
     state.fullscreen = false;

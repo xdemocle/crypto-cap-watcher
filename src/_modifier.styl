@@ -14,3 +14,20 @@
 
   &--clipped
     z-index: 5;
+
+.footer
+  &--inset
+    z-index: 4;
+
+.d-flex-auto-width
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 0;
+
+  & > *
+    flex: 1 1 auto !important;
+
+.content-vertical-center > *
+  flex-direction: column;
+  justify-content: center;
+  display: flex;

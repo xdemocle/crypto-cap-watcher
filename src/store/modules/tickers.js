@@ -1,12 +1,14 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
+import Vue from 'vue';
 import _ from 'lodash';
 import CCC from '@/libs/ccc';
+import constants from './constants';
 
 // initial state
 const state = {
   connect: false,
   message: null,
-  updates: null
+  updates: {}
 };
 
 // getters
@@ -18,9 +20,15 @@ const getters = {
 
 // actions
 const actions = {
-  socket_userMessage: (context, message) => {
-    // context.dispatch('newMessage', message);
-    context.commit('NEW_MESSAGE_RECEIVED', message);
+  getTickerData({ commit }, id) {
+    const url = [constants.state.apiUrlCoinmarketcap, '/', id, '/'].join('');
+    const ajaxCall = Vue.axios.get(url);
+
+    ajaxCall.then((response) => {
+      commit('handleTickerResponse', response.data[0]);
+    });
+
+    return ajaxCall;
   }
 };
 
@@ -43,9 +51,22 @@ const mutations = {
         const res = CCC.CURRENT.unpack(msg);
         const updates = CCC.STATIC.UTIL.dataUnpack(res);
 
-        state.updates = _.merge(state.updates, updates);
+        if (!state.updates[updates.FROMSYMBOL]) {
+          state.updates[updates.FROMSYMBOL] = {};
+        }
+
+        const mergedUpdates = _.merge(state.updates[updates.FROMSYMBOL], updates);
+
+        state.updates[updates.FROMSYMBOL] = mergedUpdates;
       }
     }
+  },
+  handleTickerResponse(state, data) {
+    if (!state.updates[data.symbol]) {
+      state.updates[data.symbol] = {};
+    }
+
+    state.updates[data.symbol] = data;
   }
 };
 

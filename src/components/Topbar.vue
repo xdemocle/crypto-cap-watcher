@@ -54,6 +54,22 @@
                     Fullscreen
                   </v-list-tile-title>
                 </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-switch v-model="showMillionsSwitch" color="purple"></v-switch>
+                  </v-list-tile-action>
+                  <v-list-tile-title>
+                    Compact Millions
+                  </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-switch v-model="tetherSwitch" color="purple"></v-switch>
+                  </v-list-tile-action>
+                  <v-list-tile-title>
+                    Tether USDT
+                  </v-list-tile-title>
+                </v-list-tile>
               </v-list>
               <v-divider></v-divider>
               <v-list>
@@ -134,6 +150,22 @@
           }
 
           return store.commit('switchFullscreen');
+        }
+      },
+      showMillionsSwitch: {
+        get() {
+          return store.state.settings.showMillions;
+        },
+        set() {
+          return store.commit('switchShowMillions');
+        }
+      },
+      tetherSwitch: {
+        get() {
+          return store.state.settings.tether;
+        },
+        set() {
+          return store.commit('switchTether');
         }
       },
       requestProgressHidden() {
