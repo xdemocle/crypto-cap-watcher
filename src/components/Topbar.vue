@@ -172,7 +172,7 @@
         return store.state.history.requestBusy;
       },
       lastUpdate() {
-        return store.state.history.last_updated;
+        return store.state.history.last_updated || Date.now();
       },
       secondsThrottling() {
         return store.state.constants.secondsThrottling;

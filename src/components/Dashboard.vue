@@ -38,13 +38,13 @@
             <div class="display-1 mb-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
             <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Dominance</div>
           </v-card-text>
-          <v-card-text class="py-2">
+          <v-card-text class="py-2" v-if="tickers.BTC">
             <div class="flex mb-2">
-              <span class="display-2" v-bind:class="priceClass('BTC')">{{bitcoin.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <span class="display-2" v-bind:class="priceClass('BTC')">{{tickers.BTC.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
               <v-tooltip top class="d-inline-block">
                 <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('BTC') == 'up', 'red--text': priceArrow24Hour('BTC') == 'down'}">
                   <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('BTC') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('BTC')}}</v-icon>
-                  <span class="d-flex">{{bitcoin.CHANGE24HOURPCT}}%</span>
+                  <span class="d-flex">{{tickers.BTC.CHANGE24HOURPCT}}%</span>
                 </div>
                 <span>24 Hours Price difference</span>
               </v-tooltip>
@@ -57,18 +57,18 @@
         </v-card>
       </v-flex>
       <v-flex d-flex-auto-width content-vertical-center px-2 py-2 v-show="showTether">
-        <v-card class="py-3">
+        <v-card class="py-3" v-if="tickers.USDT">
           <v-card-text class="py-2">
-            <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(tether['24h_volume_usd'])}}</div>
+            <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(tickers.USDT['24h_volume_usd'])}}</div>
             <div class="title ellipsis">24h Tether Volume</div>
           </v-card-text>
           <v-card-text class="py-2">
             <div class="flex mb-2">
-              <span class="display-2" v-bind:class="priceClass('USDT')">{{tether.price_usd | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <span class="display-2" v-bind:class="priceClass('USDT')">{{tickers.USDT.price_usd | currency('$', ',', 2, '.', 'front', false)}}</span>
               <v-tooltip top class="d-inline-block">
                 <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('USDT') == 'up', 'red--text': priceArrow24Hour('USDT') == 'down'}">
                   <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('USDT') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('USDT')}}</v-icon>
-                  <span class="d-flex">{{tether.percent_change_24h}}%</span>
+                  <span class="d-flex">{{tickers.USDT.percent_change_24h}}%</span>
                 </div>
                 <span>24 Hours Price difference</span>
               </v-tooltip>
@@ -179,7 +179,7 @@
           that.fadeToggle = false;
         }, 300);
 
-        return store.state.history.last_updated;
+        return store.state.history.last_updated || Date.now();
       },
       showCardsHint() {
         if (!store.state.settings.config || !store.state.settings.config.timing) {
@@ -190,11 +190,8 @@
       showTether() {
         return store.state.settings.tether;
       },
-      bitcoin() {
-        return store.state.tickers.updates.BTC || {};
-      },
-      tether() {
-        return store.state.tickers.updates.USDT || {};
+      tickers() {
+        return store.state.tickers.updates;
       }
     },
     methods: {
