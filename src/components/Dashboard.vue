@@ -191,10 +191,10 @@
         return store.state.settings.tether;
       },
       bitcoin() {
-        return store.state.tickers.updates.BTC;
+        return store.state.tickers.updates.BTC || {};
       },
       tether() {
-        return store.state.tickers.updates.USDT;
+        return store.state.tickers.updates.USDT || {};
       }
     },
     methods: {
