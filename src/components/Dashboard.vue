@@ -232,7 +232,7 @@
 
         if (coin && coin.FLAGS) {
           flag = Number(coin.FLAGS);
-        } else if (coin.percent_change_24h) {
+        } else if (coin && coin.percent_change_24h) {
           flag = coin.percent_change_24h < 0 ? 2 : 4;
         }
 
@@ -244,7 +244,7 @@
       priceArrow24Hour(symbol) {
         const coin = store.state.tickers.updates[symbol];
 
-        if (!coin) {
+        if (!coin || !coin.CHANGE24HOURPCT || !coin.percent_change_24h) {
           return 'up';
         }
 
