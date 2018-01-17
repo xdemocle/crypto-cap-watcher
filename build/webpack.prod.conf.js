@@ -73,10 +73,77 @@ const webpackConfig = merge(baseWebpackConfig, {
       links: [
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
         {
+          href: '/static/favicon.ico',
+          rel: 'shortcut icon'
+        },
+        {
+          href: '/static/android-icon-192x192.png',
+          rel: 'icon',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
           href: '/static/favicon-32x32.png',
           rel: 'icon',
           sizes: '32x32',
           type: 'image/png'
+        },
+        {
+          href: '/static/favicon-96x96.png',
+          rel: 'icon',
+          sizes: '96x96',
+          type: 'image/png'
+        },
+        {
+          href: '/static/favicon-16x16.png',
+          rel: 'icon',
+          sizes: '16x16',
+          type: 'image/png'
+        },
+        {
+          href: '/static/apple-icon-57x57.png',
+          rel: 'apple-touch-icon',
+          sizes: '57x57'
+        },
+        {
+          href: '/static/apple-icon-60x60.png',
+          rel: 'apple-touch-icon',
+          sizes: '60x60'
+        },
+        {
+          href: '/static/apple-icon-72x72.png',
+          rel: 'apple-touch-icon',
+          sizes: '72x72'
+        },
+        {
+          href: '/static/apple-icon-76x76.png',
+          rel: 'apple-touch-icon',
+          sizes: '76x76'
+        },
+        {
+          href: '/static/apple-icon-114x114.png',
+          rel: 'apple-touch-icon',
+          sizes: '114x114'
+        },
+        {
+          href: '/static/apple-icon-120x120.png',
+          rel: 'apple-touch-icon',
+          sizes: '120x120'
+        },
+        {
+          href: '/static/apple-icon-144x144.png',
+          rel: 'apple-touch-icon',
+          sizes: '144x144'
+        },
+        {
+          href: '/static/apple-icon-152x152.png',
+          rel: 'apple-touch-icon',
+          sizes: '152x152'
+        },
+        {
+          href: '/static/apple-icon-180x180.png',
+          rel: 'apple-touch-icon',
+          sizes: '180x180'
         }
       ],
       appMountId: 'app',
@@ -86,9 +153,41 @@ const webpackConfig = merge(baseWebpackConfig, {
         {
           name: 'description',
           content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'canonical',
+          content: 'https://crypto-cap-watcher.rocco.me'
+        },
+        {
+          name: 'apple-mobile-web-app-capable',
+          content: 'yes'
+        },
+        {
+          name: 'apple-mobile-web-app-title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: '#ffffff'
+        },
+        {
+          name: 'theme-color',
+          content: '#ffffff'
+        },
+        {
+          name: 'msapplication-TileColor',
+          content: '#ffffff'
+        },
+        {
+          name: 'msapplication-TileImage',
+          content: '/static/ms-icon-144x144.png'
+        },
+        {
+          name: 'manifest',
+          content: '/static/manifest.json'
         }
       ],
-      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript>',
+      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>if (\'serviceWorker\' in navigator) {console.log("Will the service worker register?");navigator.serviceWorker.register(\'static/service-worker.js\').then(function(reg){console.log("Yes, it did.");}).catch(function(err) {console.log("No it didn\'t. This happened: ", err);});}</script>',
       headHtmlSnippet: '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,
