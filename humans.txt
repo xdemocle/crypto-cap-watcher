@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+
+/* TEAM */
+	Full-Stack Web Developer: Rocco R.
+	Twitter: @xdemocle
+	From: World, Universe
+
+
+/* TECHNOLOGY COLOPHON */
+
+  HTML5, CSS3, Webpack, Vue, Vuex, Service Worker, Vuetify
+
+
+/* SITE */
+	Language: English
+	Doctype: HTML5
+	IDE: Visual Studio Code

@@ -46,6 +46,8 @@ const actions = {
       commit('handleResponse', { response, commit });
       commit('setSecondsLeft', { rootState });
       commit('setbusy', false);
+    }).catch(() => {
+      commit('setbusy', false);
     });
 
     return ajaxCall;

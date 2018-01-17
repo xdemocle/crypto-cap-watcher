@@ -1,8 +1,8 @@
 {
  "short_name": "Crypto Cap Watcher",
  "name": "Crypto Cap Watcher",
- "start_url": "/?launcher=true",
- "display": "fullscreen",
+ "start_url": "/",
+ "display": "standalone",
  "background_color": "#303030",
  "theme_color": "#ffffff",
  "orientation": "portrait",
@@ -45,8 +45,3 @@
   }
  ]
 }
-
-Has a valid name property.
-Has a valid short_name property.
-Has a valid start_url property.
-Has a valid display property and the value is standalone, fullscreen, or minimal-ui.

@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -73,8 +74,12 @@ const webpackConfig = merge(baseWebpackConfig, {
       links: [
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
         {
-          href: '/static/favicon.ico',
+          href: '/favicon.ico',
           rel: 'shortcut icon'
+        },
+        {
+          href: '/manifest.json',
+          rel: 'manifest'
         },
         {
           href: '/static/android-icon-192x192.png',
@@ -183,11 +188,47 @@ const webpackConfig = merge(baseWebpackConfig, {
           content: '/static/ms-icon-144x144.png'
         },
         {
-          name: 'manifest',
-          content: '/static/manifest.json'
+          name: 'og:title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'og:type',
+          content: 'website'
+        },
+        {
+          name: 'og:image',
+          content: 'https://crypto-cap-watcher.rocco.me/static/android-icon-192x192.png'
+        },
+        {
+          name: 'og:url',
+          content: 'https://crypto-cap-watcher.rocco.me/'
+        },
+        {
+          name: 'og:description',
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'twitter:card',
+          content: 'summary'
+        },
+        {
+          name: 'twitter:url',
+          content: 'https://crypto-cap-watcher.rocco.me/'
+        },
+        {
+          name: 'twitter:title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'twitter:description',
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'twitter:image',
+          content: 'https://crypto-cap-watcher.rocco.me/static/android-icon-192x192.png'
         }
       ],
-      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>if (\'serviceWorker\' in navigator) {console.log("Will the service worker register?");navigator.serviceWorker.register(\'static/service-worker.js\').then(function(reg){console.log("Yes, it did.");}).catch(function(err) {console.log("No it didn\'t. This happened: ", err);});}</script>',
+      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>(function() { if(\'serviceWorker\' in navigator) { navigator.serviceWorker.register(\'/service-worker.js\'); }})();</script>',
       headHtmlSnippet: '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,
@@ -244,8 +285,46 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../CNAME'),
         to: config.build.assetsRoot,
         ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../robots.txt'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../humans.txt'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../static/manifest.json'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../static/favicon.ico'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
       }
-    ])
+    ]),
+
+    // service worker caching
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'crypto-cap-watcher',
+      filename: 'service-worker.js',
+      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      minify: true,
+      stripPrefix: 'dist/',
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
+          handler: 'cacheFirst'
+        }]
+    })
   ]
 })
 

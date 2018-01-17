@@ -183,7 +183,7 @@
     },
     methods: {
       refreshData() {
-        this.$store.dispatch('getdata', true).then((response) => {
+        this.$store.dispatch('getdata').then((response) => {
           this.throttlingDialog = response === 'throttling' || false;
         });
       },

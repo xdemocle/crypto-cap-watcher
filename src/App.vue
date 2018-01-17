@@ -29,33 +29,61 @@
     created() {
       const that = this;
 
+      // Initialize store container for internet and app status
+      this.$store.dispatch('initializeStatus');
+
+      // Always restore fullscreen flag at bootstrap
+      this.$store.commit('resetFullscreen');
+
+      // Bootstrap the app settings and other tickers
+      this.bootstrap();
+
       // Subsribe to cryptocompare websocket for bitcoin price
       this.$socket.emit('SubAdd', {
         subs: this.$store.state.constants.wsCccSubscriptions
       });
 
+      // Subscribe to getdata action in order to retrieve make another call
       this.$store.subscribeAction((action) => {
         if (action.type === 'getdata') {
-          that.$store.dispatch('getTickerData', 'tether');
-        }
-      });
-
-      // Always restore fullscreen flag at bootstrap
-      this.$store.commit('resetFullscreen');
-
-      // First get remote settings than start the setInterval for updating local
-      // data from history and secondsLeft from next request.
-      this.$store.dispatch('getsettings', () => {
-        if (!intervalChecker) {
-          intervalChecker = window.setInterval(that.updateSecondsLeft, 1000);
+          if (this.$store.state.status.online) {
+            that.$store.dispatch('getTickerData', 'tether');
+          } else {
+            // If network error try again
+            setTimeout(that.getdata, 1500);
+          }
+        } else if (action.type === 'getTickerData') {
+          if (!this.$store.state.status.online) {
+            // If network error try again
+            setTimeout(() => {
+              that.$store.dispatch('getTickerData', 'tether');
+            }, 1500);
+          }
         }
       });
     },
     methods: {
+      bootstrap() {
+        const that = this;
+
+        // First get remote settings than start the setInterval for updating
+        // local data from history and secondsLeft from next request.
+        this.$store.dispatch('getsettings', () => {
+          if (!intervalChecker) {
+            intervalChecker = window.setInterval(that.updateSecondsLeft, 1000);
+          }
+        }).catch(() => {
+          // If network error try again with setTimeout
+          setTimeout(that.bootstrap, 1500);
+        });
+      },
+      getdata() {
+        return this.$store.dispatch('getdata');
+      },
       updateSecondsLeft() {
         // Run at interval a new request
         if (this.$store.state.history.secondsLeft <= 1) {
-          return this.$store.dispatch('getdata');
+          return this.getdata();
         }
 
         return this.$store.dispatch('updateSecondsLeft');
