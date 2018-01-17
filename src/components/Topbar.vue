@@ -1,102 +1,99 @@
 <template>
-  <div>
-    <v-toolbar app fixed clipped-left scroll-off-screen>
-      <v-layout
-        row
-        wrap
-        align-center
-        fluid>
-        <v-flex sm4 class="text-xs-left hidden-xs-only">
-          <v-toolbar-title class="subheading">
-            Updated: <span class="dynamic-placeholder">{{lastUpdate | moment('HH:mm \\G\\M\\TZ')}}</span>
-          </v-toolbar-title>
-        </v-flex>
-        <v-flex xs8 sm4 class="text-xs-left text-sm-center">
-          <v-toolbar-title class="headline">{{siteName}}</v-toolbar-title>
-        </v-flex>
-        <v-flex xs4 sm4 class="text-xs-right" justify-space-around>
-          <v-btn flat icon @click="refreshData" v-bind:loading="requestProgressHidden">
-            <v-icon>refresh</v-icon>
+  <v-toolbar app fixed>
+    <v-layout
+      row
+      wrap
+      align-center
+      fluid>
+      <v-flex sm4 class="text-xs-left hidden-xs-only">
+        <v-toolbar-title class="subheading">
+          Updated: <span class="dynamic-placeholder">{{lastUpdate | moment('HH:mm \\G\\M\\TZ')}}</span>
+        </v-toolbar-title>
+      </v-flex>
+      <v-flex xs7 sm4 class="text-xs-left text-sm-center">
+        <v-toolbar-title class="headline">{{siteName}}</v-toolbar-title>
+      </v-flex>
+      <v-flex xs5 sm4 class="text-xs-right" justify-space-around>
+        <v-btn flat icon @click="refreshData" v-bind:loading="requestProgressHidden">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+        <v-menu
+          offset-x
+          offset-y
+          :nudge-width="260"
+          :close-on-content-click="false">
+          <v-btn slot="activator" icon>
+            <v-icon>more_vert</v-icon>
           </v-btn>
-          <v-menu
-            offset-x
-            offset-y
-            :nudge-width="260"
-            :close-on-content-click="false">
-            <v-btn slot="activator" icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-            <v-card>
-              <v-list>
-                <v-list-tile avatar>
-                  <v-list-tile-avatar>
-                    <v-icon>settings</v-icon>
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title>Settings</v-list-tile-title>
-                    <v-list-tile-sub-title>Crypto Cap Watcher</v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-              <v-divider></v-divider>
-              <v-list>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-switch v-model="themeSwitch" color="purple"></v-switch>
-                  </v-list-tile-action>
-                  <v-list-tile-title>{{theme}} theme</v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-switch v-model="fullscreenSwitch" color="purple"></v-switch>
-                  </v-list-tile-action>
+          <v-card>
+            <v-list>
+              <v-list-tile avatar>
+                <v-list-tile-avatar>
+                  <v-icon>settings</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>Settings</v-list-tile-title>
+                  <v-list-tile-sub-title>Crypto Cap Watcher</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="themeSwitch" color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>{{theme}} theme</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="fullscreenSwitch" color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>
+                  Fullscreen
+                </v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="showMillionsSwitch" color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>
+                  Compact Millions
+                </v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="tetherSwitch" color="purple"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>
+                  Tether USDT
+                </v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-tile>
+                <v-list-tile-content>
                   <v-list-tile-title>
-                    Fullscreen
+                    <span class="title">Changes</span>
                   </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-switch v-model="showMillionsSwitch" color="purple"></v-switch>
-                  </v-list-tile-action>
-                  <v-list-tile-title>
-                    Compact Millions
-                  </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-switch v-model="tetherSwitch" color="purple"></v-switch>
-                  </v-list-tile-action>
-                  <v-list-tile-title>
-                    Tether USDT
-                  </v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-              <v-divider></v-divider>
-              <v-list>
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-list-tile-title>
-                      <span class="title">Changes</span>
-                    </v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-              <v-layout
-                wrap
-                align-center
-                fluid
-                style="max-width: 310px">
-                <v-flex xs6 class="pl-3 pr-3 py-2 heading" v-for="(card, index) in timing" v-bind:key="index">
-                  <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.shortLabel" hide-details></v-switch>
-                </v-flex>
-              </v-layout>
-            </v-card>
-          </v-menu>
-        </v-flex>
-        <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
-      </v-layout>
-    </v-toolbar>
-
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+            <v-layout
+              wrap
+              align-center
+              fluid
+              style="max-width: 310px">
+              <v-flex xs6 class="pl-3 pr-3 py-2 heading" v-for="(card, index) in timing" v-bind:key="index">
+                <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.shortLabel" hide-details></v-switch>
+              </v-flex>
+            </v-layout>
+          </v-card>
+        </v-menu>
+      </v-flex>
+      <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
+    </v-layout>
     <v-dialog v-model="throttlingDialog" max-width="30rem">
       <v-card>
         <v-card-title>
@@ -111,7 +108,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
+  </v-toolbar>
 </template>
 
 <script>

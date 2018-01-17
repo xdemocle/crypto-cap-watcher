@@ -16,7 +16,6 @@ import fullscreen from 'vue-fullscreen';
 import colors from 'vuetify/es5/util/colors';
 
 import App from './App';
-import router from './router';
 import store from './store';
 
 Vue.use(VueSocketio, socketio('https://streamer.cryptocompare.com'), store);
@@ -54,7 +53,6 @@ window.Vue = Vue;
 new Vue({
   el: '#app',
   store,
-  router,
   template: '<App/>',
   components: { App }
 });

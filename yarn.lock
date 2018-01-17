@@ -7477,10 +7477,6 @@ vue-moment@^3.1.0:
   dependencies:
     moment "^2.11.1"
 
-vue-router@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
-
 vue-socket.io@^2.1.1-b:
   version "2.1.1-b"
   resolved "https://registry.yarnpkg.com/vue-socket.io/-/vue-socket.io-2.1.1-b.tgz#bcffcdeb1647a979e6533d63d1f29c0f55411c8c"

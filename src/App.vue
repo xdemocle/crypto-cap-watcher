@@ -1,11 +1,9 @@
 <template>
   <v-app id="app" :dark="theme">
     <topbar></topbar>
-    <main class="mb-5">
-      <v-content>
-        <router-view></router-view>
-      </v-content>
-    </main>
+    <v-content class="mb-5">
+      <dashboard></dashboard>
+    </v-content>
     <bottombar></bottombar>
   </v-app>
 </template>
@@ -13,6 +11,7 @@
 <script>
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
+  import Dashboard from '@/components/Dashboard';
 
   let intervalChecker = null;
 
@@ -24,7 +23,8 @@
     },
     components: {
       Topbar,
-      Bottombar
+      Bottombar,
+      Dashboard
     },
     created() {
       const that = this;
