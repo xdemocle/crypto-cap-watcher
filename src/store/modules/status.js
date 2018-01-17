@@ -2,7 +2,7 @@
 
 // initial state
 const state = {
-  online: true
+  online: false
 };
 
 // actions
@@ -20,6 +20,9 @@ const actions = {
       window.addEventListener('offline', () => {
         commit('setStatus', false);
       }, false);
+
+      // Also set during bootstrap of the app
+      commit('setStatus', window.navigator.onLine);
     } else {
       // Works in IE with the Work Offline option in the
       // File menu and pulling the ethernet cable
