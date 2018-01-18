@@ -19,6 +19,9 @@
     computed: {
       theme() {
         return this.$store.state.settings.theme;
+      },
+      pageActive() {
+        return this.$store.state.status.pageActive;
       }
     },
     components: {
@@ -77,8 +80,8 @@
           setTimeout(that.bootstrap, 1500);
         });
       },
-      getdata() {
-        return this.$store.dispatch('getdata');
+      getdata(forced) {
+        return this.$store.dispatch('getdata', forced);
       },
       updateSecondsLeft() {
         // Run at interval a new request
@@ -87,6 +90,24 @@
         }
 
         return this.$store.dispatch('updateSecondsLeft');
+      },
+      checkLastUpdateIsOld() {
+        if (!this.$store.state.history.clientLastUpdated) {
+          return false;
+        }
+
+        const now = (new Date()).getTime() / 1000;
+        const isOlder = now - this.$store.state.history.clientLastUpdated >
+          this.$store.state.settings.config.checkEachMinutes * 60;
+
+        return isOlder;
+      }
+    },
+    watch: {
+      pageActive(status) {
+        if (status && this.checkLastUpdateIsOld()) {
+          this.getdata(true);
+        }
       }
     }
   };

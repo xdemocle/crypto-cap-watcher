@@ -1,13 +1,19 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
+import Visibility from 'visibilityjs';
 
 // initial state
 const state = {
-  online: false
+  online: false,
+  pageActive: true
 };
 
 // actions
 const actions = {
   initializeStatus({ commit }) {
+    Visibility.change((e, visible) => {
+      commit('setPageActive', visible === 'visible');
+    });
+
     if (window.addEventListener) {
       // Works well in Firefox and Opera with the
       // Work Offline option in the File menu.
@@ -41,6 +47,9 @@ const actions = {
 const mutations = {
   setStatus(state, connectionStatus) {
     state.online = connectionStatus;
+  },
+  setPageActive(state, visibility) {
+    state.pageActive = visibility;
   }
 };
 

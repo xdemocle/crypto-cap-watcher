@@ -7,6 +7,7 @@ const state = {
   requestBusy: false,
   secondsLeft: 0,
   last_updated: null,
+  clientLastUpdated: null,
   total_market_cap: 0,
   bitcoin_percentage: 0,
   total_24h_volume: 0,
@@ -17,7 +18,11 @@ const state = {
 const getters = {
   requestBusy: state => state.requestBusy,
   secondsLeft: state => state.secondsLeft,
+  secondsPassed(state, rootState) {
+    return (rootState.config.checkEachMinutes * 60) - state.secondsLeft;
+  },
   last_updated: state => state.last_updated,
+  clientLastUpdated: state => state.clientLastUpdated,
   total_market_cap: state => state.total_market_cap,
   total_24h_volume: state => state.total_24h_volume,
   bitcoin_percentage(state) {
@@ -28,13 +33,14 @@ const getters = {
 
 // actions
 const actions = {
-  getdata({ commit, state, rootState }) {
-    const secondsPassed = (rootState.settings.config.checkEachMinutes * 60) -
-      state.secondsLeft;
+  getdata({ commit, state, rootState }, bypass) {
+    if (!bypass) {
+      const secondsPassed = this.getters.secondsPassed;
 
-    // Add throttling for limiting number of requests
-    if (secondsPassed <= rootState.constants.secondsThrottling && secondsPassed >= 0) {
-      return 'throttling';
+      // Add throttling for limiting number of requests
+      if (secondsPassed <= rootState.constants.secondsThrottling && secondsPassed >= 0) {
+        return 'throttling';
+      }
     }
 
     commit('setbusy', true);
@@ -71,6 +77,7 @@ const mutations = {
     state.requestBusy = busy;
   },
   handleResponse(state, { response }) {
+    state.clientLastUpdated = new Date().getTime() / 1000;
     state.last_updated = response.data.last_updated;
     state.total_market_cap = response.data.total_market_cap;
     state.total_24h_volume = response.data.total_24h_volume;
