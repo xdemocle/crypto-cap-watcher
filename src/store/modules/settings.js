@@ -62,7 +62,30 @@ const mutations = {
   },
   setConfig(state, { response, callback }) {
     const checkEachMinutes = response.data.checkEachMinutes;
-    state.config = _.merge(response.data, state.config);
+
+    // Don't look at the two iterators below, your eyes could bleeds :D
+    if (state.config.timing) {
+      _.each(state.config.timing, (timing, index) => {
+        if (timing) {
+          const item = _.find(response.data.timing, { id: timing.id });
+
+          if (!item) {
+            Vue.delete(state.config.timing, index);
+          }
+        }
+      });
+
+      _.each(response.data.timing, (timing) => {
+        const item = _.find(state.config.timing, { id: timing.id });
+
+        if (!item) {
+          state.config.timing.push(timing);
+        }
+      });
+    } else {
+      state.config = response.data;
+    }
+
     state.config.checkEachMinutes = checkEachMinutes;
 
     if (callback) {

@@ -139,7 +139,7 @@
                 Bitcoin Dominance
               </div>
               <div class="pt-1 pb-0 mb-0">
-                <div class="title ellipsis">{{getLabel(card.id)}}</div>
+                <div class="title ellipsis">{{getCardLabel(card.id)}}</div>
               </div>
             </v-card-text>
           </v-card>
@@ -204,12 +204,6 @@
 
         return this.$options.filters.currency(val);
       },
-      cardVisibility(id) {
-        if (!store.state.settings.config || !store.state.settings.config.timing) {
-          return true;
-        }
-        return _.find(store.state.settings.config.timing, { id }).visible;
-      },
       toggleCardVisibility(id) {
         this.$store.dispatch('updateConfigTiming', id);
       },
@@ -219,8 +213,29 @@
       getClass(direction) {
         return direction === 'down' ? 'red--text' : 'green--text';
       },
-      getLabel(id) {
-        return _.find(store.state.settings.config.timing, { id }).label;
+      getCard(id) {
+        if (!store.state.settings.config || !store.state.settings.config.timing) {
+          return false;
+        }
+
+        return _.find(store.state.settings.config.timing, { id });
+      },
+      cardVisibility(id) {
+        const item = this.getCard(id);
+
+        if (!item) {
+          return false;
+        }
+
+        return item.visible;
+      },
+      getCardLabel(id) {
+        const item = this.getCard(id);
+
+        if (!item) {
+          return false;
+        }
+        return item.label;
       },
       priceClass(symbol) {
         let flag = 4;

@@ -75,7 +75,7 @@
               </v-list-tile>
             </v-list>
             <v-divider></v-divider>
-            <v-list>
+            <v-list class="py-0">
               <v-list-tile>
                 <v-list-tile-content>
                   <v-list-tile-title>
@@ -89,7 +89,7 @@
               align-center
               fluid
               style="max-width: 310px">
-              <v-flex xs6 class="pl-3 pr-3 py-2 heading" v-for="(card, index) in timing" v-bind:key="index">
+              <v-flex xs6 class="pl-3 pr-3 py-2 heading" v-for="(card, index) in timingSorted" v-bind:key="index">
                 <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.shortLabel" hide-details></v-switch>
               </v-flex>
             </v-layout>
@@ -116,6 +116,7 @@
 </template>
 
 <script>
+  import _ from 'lodash';
   import store from '../store';
 
   export default {
@@ -181,11 +182,11 @@
       secondsThrottling() {
         return store.state.constants.secondsThrottling;
       },
-      timing() {
+      timingSorted() {
         if (!store.state.settings.config) {
           return null;
         }
-        return store.state.settings.config.timing;
+        return _.orderBy(store.state.settings.config.timing, 'id');
       }
     },
     methods: {

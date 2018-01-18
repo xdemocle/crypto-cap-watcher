@@ -1,7 +1,7 @@
 <template>
   <v-app id="app" :dark="theme" :class="appClass">
     <topbar></topbar>
-    <v-content class="mb-5">
+    <v-content>
       <dashboard></dashboard>
     </v-content>
     <bottombar></bottombar>
@@ -141,7 +141,7 @@
   @import '_modifier'
 
   html
-    font-size: 10px
+    font-size: 11px
 
   @media $display-breakpoints.sm-and-up
     html
