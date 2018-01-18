@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" :dark="theme">
+  <v-app id="app" :dark="theme" :class="appClass">
     <topbar></topbar>
     <v-content class="mb-5">
       <dashboard></dashboard>
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+  import FontFaceObserver from 'fontfaceobserver';
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
   import Dashboard from '@/components/Dashboard';
@@ -16,6 +17,9 @@
   let intervalChecker = null;
 
   export default {
+    data: () => ({
+      appClass: 'material-icons-notready'
+    }),
     computed: {
       theme() {
         return this.$store.state.settings.theme;
@@ -31,6 +35,13 @@
     },
     created() {
       const that = this;
+
+      // Font face observer for material icons
+      const materialIconsObserver = new FontFaceObserver('Material Icons');
+      materialIconsObserver.load().then(() => {
+        that.appClass = that.appClass.replace('material-icons-notready',
+          'material-icons-ready');
+      });
 
       // Initialize store container for internet and app status
       this.$store.dispatch('initializeStatus');

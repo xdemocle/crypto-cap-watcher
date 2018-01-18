@@ -5,19 +5,23 @@
       wrap
       align-center
       fluid>
-      <v-flex sm4 class="text-xs-left hidden-xs-only">
-        <v-toolbar-title class="subheading">
-          Updated: <span class="dynamic-placeholder">{{lastUpdate | moment('HH:mm \\G\\M\\TZ')}}</span>
-        </v-toolbar-title>
+      <v-flex xs2 sm4 class="text-xs-left">
+        <v-tooltip bottom>
+          <v-btn slot="activator" flat icon @click="refreshData" v-bind:loading="requestProgressHidden">
+            <v-icon>refresh</v-icon>
+          </v-btn>
+          <span>Last updated: {{lastUpdate | moment('HH:mm \\G\\M\\TZ')}}</span>
+        </v-tooltip>
       </v-flex>
-      <v-flex xs7 sm4 class="text-xs-left text-sm-center">
-        <v-toolbar-title class="headline">{{siteName}}</v-toolbar-title>
+      <v-flex xs8 sm4 class="text-xs-center">
+        <v-tooltip bottom max-width="25rem">
+          <v-toolbar-title slot="activator" class="headline ml-0">{{siteName}}</v-toolbar-title>
+          <span>{{siteDescription}}</span>
+        </v-tooltip>
       </v-flex>
-      <v-flex xs5 sm4 class="text-xs-right" justify-space-around>
-        <v-btn flat icon @click="refreshData" v-bind:loading="requestProgressHidden">
-          <v-icon>refresh</v-icon>
-        </v-btn>
+      <v-flex xs2 sm4 class="text-xs-right">
         <v-menu
+          slot="activator"
           offset-x
           offset-y
           :nudge-width="260"
@@ -93,21 +97,21 @@
         </v-menu>
       </v-flex>
       <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
+      <v-dialog v-model="throttlingDialog" max-width="30rem">
+        <v-card>
+          <v-card-title>
+            <span class="title">Limit on requests</span>
+          </v-card-title>
+          <v-card-text>
+            In order to not overload <a href="https://www.coinmarketcap.com" target="_new">Coinmarketcap.com</a> services,
+            we are limiting the number of refresh of data at <strong>{{secondsThrottling}}</strong> seconds each.
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click.stop="throttlingDialog=false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
-    <v-dialog v-model="throttlingDialog" max-width="30rem">
-      <v-card>
-        <v-card-title>
-          <span class="title">Limit on requests</span>
-        </v-card-title>
-        <v-card-text>
-          In order to not overload <a href="https://www.coinmarketcap.com" target="_new">Coinmarketcap.com</a> services,
-          we are limiting the number of refresh of data at <strong>{{secondsThrottling}}</strong> seconds each.
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click.stop="throttlingDialog=false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-toolbar>
 </template>
 
@@ -134,6 +138,9 @@
       },
       siteName() {
         return store.state.constants.name;
+      },
+      siteDescription() {
+        return store.state.constants.description;
       },
       fullscreenSwitch: {
         get() {
