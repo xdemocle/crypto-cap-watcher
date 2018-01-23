@@ -161,7 +161,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
         {
           name: 'canonical',
-          content: 'https://crypto-cap-watcher.rocco.me'
+          content: 'https://cryptocap.watch'
         },
         {
           name: 'apple-mobile-web-app-capable',
@@ -197,11 +197,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
         {
           name: 'og:image',
-          content: 'https://crypto-cap-watcher.rocco.me/static/android-icon-192x192.png'
+          content: 'https://cryptocap.watch/static/android-icon-192x192.png'
         },
         {
           name: 'og:url',
-          content: 'https://crypto-cap-watcher.rocco.me/'
+          content: 'https://cryptocap.watch/'
         },
         {
           name: 'og:description',
@@ -213,7 +213,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
         {
           name: 'twitter:url',
-          content: 'https://crypto-cap-watcher.rocco.me/'
+          content: 'https://cryptocap.watch/'
         },
         {
           name: 'twitter:title',
@@ -225,7 +225,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
         {
           name: 'twitter:image',
-          content: 'https://crypto-cap-watcher.rocco.me/static/android-icon-192x192.png'
+          content: 'https://cryptocap.watch/static/android-icon-192x192.png'
         }
       ],
       bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>(function() { if(\'serviceWorker\' in navigator) { navigator.serviceWorker.register(\'/service-worker.js\'); }})();</script>',
