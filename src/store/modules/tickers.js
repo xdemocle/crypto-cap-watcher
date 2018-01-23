@@ -2,26 +2,23 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import CCC from '@/libs/ccc';
-import constants from './constants';
 
 // initial state
 const state = {
   connect: false,
-  message: null,
   updates: {}
 };
 
 // getters
 const getters = {
   connect: state => state.connect,
-  message: state => state.message,
   updates: state => state.updates
 };
 
 // actions
 const actions = {
-  getTickerData({ commit }, id) {
-    const url = [constants.state.apiUrlCoinmarketcap, '/', id, '/'].join('');
+  getTickerData({ commit, rootState }, id) {
+    const url = [rootState.constants.apiUrlCoinmarketcap, '/', id, '/'].join('');
     const ajaxCall = Vue.axios.get(url);
 
     ajaxCall.then((response) => {
@@ -35,14 +32,26 @@ const actions = {
 // mutations
 const mutations = {
   SOCKET_CONNECT(state) {
+    // debugger;
     state.connect = true;
   },
   SOCKET_DISCONNECT(state) {
+    // debugger;
     state.connect = false;
   },
+  // SOCKET_RECONNECT(state) {
+  //   debugger
+  // },
+  // SOCKET_RECONNECT_ATTEMPT(state) {
+  //   debugger
+  // },
+  // SOCKET_PING(state) {
+  //   debugger
+  // },
+  // SOCKET_PONG(state) {
+  //   debugger
+  // },
   SOCKET_M(state, message) {
-    state.message = message;
-
     if (message && message[0]) {
       const msg = message[0];
       const messageType = msg.substring(0, msg.indexOf('~'));

@@ -4,21 +4,19 @@ import 'babel-polyfill';
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import socketio from 'socket.io-client';
-import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import VueMoment from 'vue-moment';
 import VueCurrencyFilter from 'vue-currency-filter';
 import moment from 'moment-timezone';
 import fullscreen from 'vue-fullscreen';
+import socketio from 'socket.io-client';
+import VueSocketio from 'vue-socket.io';
 
 // Helpers
 import colors from 'vuetify/es5/util/colors';
 
 import App from './App';
 import store from './store';
-
-Vue.use(VueSocketio, socketio('https://streamer.cryptocompare.com'), store);
 
 Vue.use(VueAxios, axios);
 
@@ -48,6 +46,8 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = process.env.NODE_ENV;
 
 window.Vue = Vue;
+
+Vue.use(VueSocketio, socketio(store.state.constants.wsLivetimePricesUrl), store);
 
 /* eslint-disable no-new */
 new Vue({

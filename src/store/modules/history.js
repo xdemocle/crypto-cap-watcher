@@ -1,6 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
-import constants from './constants';
 
 // initial state
 const state = {
@@ -45,7 +44,7 @@ const actions = {
 
     commit('setbusy', true);
 
-    const url = [constants.state.apiUrl(), '/statistics'].join('');
+    const url = [rootState.constants.apiUrl(), '/statistics'].join('');
     const ajaxCall = Vue.axios.get(url);
 
     ajaxCall.then((response) => {

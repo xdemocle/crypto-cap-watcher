@@ -1,7 +1,6 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
 import _ from 'lodash';
-import constants from './constants';
 
 // initial state
 const state = {
@@ -31,8 +30,8 @@ const actions = {
 
     commit('setTimingWrapper', { index, visible });
   },
-  getsettings({ commit }, callback) {
-    const url = [constants.state.apiUrl(), '/settings'].join('');
+  getsettings({ commit, rootState }, callback) {
+    const url = [rootState.constants.apiUrl(), '/settings'].join('');
     const ajaxCall = Vue.axios.get(url);
 
     ajaxCall.then((response) => {

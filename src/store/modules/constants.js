@@ -18,9 +18,9 @@ const state = {
   },
   wsCccSubscriptions: [
     '5~CCCAGG~BTC~USD'
-    // '5~CCCAGG~USDT~USD'
   ],
-  apiUrlCoinmarketcap: 'https://api.coinmarketcap.com/v1/ticker'
+  apiUrlCoinmarketcap: 'https://api.coinmarketcap.com/v1/ticker',
+  wsLivetimePricesUrl: 'https://streamer.cryptocompare.com'
 };
 
 export default {

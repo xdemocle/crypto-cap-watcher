@@ -111,6 +111,19 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="offlineDialog" max-width="30rem">
+        <v-card>
+          <v-card-title>
+            <span class="title">Internet offline</span>
+          </v-card-title>
+          <v-card-text>
+            Your internet connection if offline, please try again later.
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click.stop="offlineDialog=false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </v-toolbar>
 </template>
@@ -123,7 +136,8 @@
     name: 'Topbar',
     data: () => ({
       fadeToggle: false,
-      throttlingDialog: false
+      throttlingDialog: false,
+      offlineDialog: false
     }),
     computed: {
       themeSwitch: {
@@ -191,6 +205,11 @@
     },
     methods: {
       refreshData() {
+        if (!this.$store.state.status.online) {
+          this.offlineDialog = true;
+          return;
+        }
+
         this.$store.dispatch('getdata').then((response) => {
           this.throttlingDialog = response === 'throttling' || false;
         });

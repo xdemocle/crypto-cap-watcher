@@ -13,6 +13,7 @@
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
   import Dashboard from '@/components/Dashboard';
+  import store from './store';
 
   let intervalChecker = null;
 
@@ -26,6 +27,9 @@
       },
       pageActive() {
         return this.$store.state.status.pageActive;
+      },
+      connectionOffline() {
+        return !this.$store.state.status.online;
       }
     },
     components: {
@@ -52,9 +56,21 @@
       // Bootstrap the app settings and other tickers
       this.bootstrap();
 
-      // Subsribe to cryptocompare websocket for bitcoin price
-      this.$socket.emit('SubAdd', {
-        subs: this.$store.state.constants.wsCccSubscriptions
+      // that.$socket.emit('ping');
+
+      // Subscribe to cryptocompare websocket for bitcoin price
+      this.$store.subscribe((mutation, state) => {
+        if(mutation && mutation.type === 'SOCKET_CONNECT') {
+          that.$socket.emit('SubAdd', {
+            subs: state.constants.wsCccSubscriptions
+          });
+
+          window.socket = that.$socket;
+        }
+
+        // if(mutation && mutation.type === 'SOCKET_DISCONNECT') {
+
+        // }
       });
 
       // Subscribe to getdata action in order to retrieve make another call
