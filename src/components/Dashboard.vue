@@ -64,7 +64,7 @@
           </v-card-text>
           <v-card-text class="py-2">
             <div class="flex mb-2">
-              <span class="display-2" v-bind:class="priceClass('USDT')">{{tickers.USDT.price_usd | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <span class="display-2" v-bind:class="priceClass('USDT')">{{tickers.USDT.price_usd | currency('$', ',', 4, '.', 'front', false)}}</span>
               <v-tooltip top class="d-inline-block">
                 <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('USDT') == 'up', 'red--text': priceArrow24Hour('USDT') == 'down'}">
                   <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('USDT') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('USDT')}}</v-icon>
