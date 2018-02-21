@@ -60,7 +60,7 @@ const mutations = {
     state.fullscreen = false;
   },
   setConfig(state, { response, callback }) {
-    const checkEachMinutes = response.data.checkEachMinutes;
+    const { checkEachMinutes } = response.data;
 
     // Don't look at the two iterators below, your eyes could bleeds :D
     if (state.config.timing) {

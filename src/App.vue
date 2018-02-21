@@ -13,7 +13,6 @@
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
   import Dashboard from '@/components/Dashboard';
-  import store from './store';
 
   let intervalChecker = null;
 
@@ -43,8 +42,10 @@
       // Font face observer for material icons
       const materialIconsObserver = new FontFaceObserver('Material Icons');
       materialIconsObserver.load().then(() => {
-        that.appClass = that.appClass.replace('material-icons-notready',
-          'material-icons-ready');
+        that.appClass = that.appClass.replace(
+          'material-icons-notready',
+          'material-icons-ready'
+        );
       });
 
       // Initialize store container for internet and app status
@@ -60,7 +61,7 @@
 
       // Subscribe to cryptocompare websocket for bitcoin price
       this.$store.subscribe((mutation, state) => {
-        if(mutation && mutation.type === 'SOCKET_CONNECT') {
+        if (mutation && mutation.type === 'SOCKET_CONNECT') {
           that.$socket.emit('SubAdd', {
             subs: state.constants.wsCccSubscriptions
           });
@@ -68,7 +69,7 @@
           window.socket = that.$socket;
         }
 
-        // if(mutation && mutation.type === 'SOCKET_DISCONNECT') {
+        // if (mutation && mutation.type === 'SOCKET_DISCONNECT') {
 
         // }
       });

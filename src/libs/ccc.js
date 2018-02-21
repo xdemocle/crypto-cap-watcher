@@ -217,11 +217,11 @@ CCC.STATIC.UTIL = {
     const CHANGE24HOURPCT = (((currentPrice[pair].PRICE - currentPrice[pair].OPEN24HOUR) /
       currentPrice[pair].OPEN24HOUR) * 100).toFixed(2);
 
-    if (!isNaN(CHANGE24HOUR)) {
+    if (!Number.isNaN(parseFloat(CHANGE24HOUR))) {
       currentPrice[pair].CHANGE24HOUR = CHANGE24HOUR;
     }
 
-    if (!isNaN(CHANGE24HOURPCT)) {
+    if (!Number.isNaN(parseFloat(CHANGE24HOURPCT))) {
       currentPrice[pair].CHANGE24HOURPCT = CHANGE24HOURPCT;
     }
 

@@ -32,9 +32,9 @@ const getters = {
 
 // actions
 const actions = {
-  getdata({ commit, state, rootState }, bypass) {
+  getdata({ commit, rootState }, bypass) {
     if (!bypass) {
-      const secondsPassed = this.getters.secondsPassed;
+      const { secondsPassed } = this.getters;
 
       // Add throttling for limiting number of requests
       if (secondsPassed <= rootState.constants.secondsThrottling && secondsPassed >= 0) {
