@@ -118,30 +118,12 @@
         }
 
         return this.$store.dispatch('updateSecondsLeft');
-      },
-      checkLastUpdateIsOld(callback) {
-        const that = this;
-        if (!this.$store.state.history.clientLastUpdated) {
-          return false;
-        }
-
-        setTimeout(() => {
-          const now = (new Date()).getTime() / 1000;
-          const isOlder = now - that.$store.state.history.clientLastUpdated >
-            that.$store.state.settings.config.checkEachMinutes * 60;
-
-          if (isOlder && callback) {
-            callback();
-          }
-        });
-
-        return null;
       }
     },
     watch: {
       pageActive(status) {
         if (status) {
-          this.checkLastUpdateIsOld(this.getdata.call(null, true));
+          this.getdata(true);
         }
       }
     }
