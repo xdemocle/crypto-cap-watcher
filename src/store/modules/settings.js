@@ -8,6 +8,7 @@ const state = {
   fullscreen: false,
   tether: false,
   showMillions: true,
+  cast: false,
   config: {}
 };
 
@@ -17,6 +18,7 @@ const getters = {
   fullscreen: state => state.fullscreen,
   tether: state => state.tether,
   showMillions: state => state.showMillions,
+  cast: state => state.cast,
   config: state => state.config
 };
 
@@ -55,6 +57,9 @@ const mutations = {
   },
   switchShowMillions(state) {
     state.showMillions = !state.showMillions;
+  },
+  switchCast(state) {
+    state.cast = !state.cast;
   },
   resetFullscreen(state) {
     state.fullscreen = false;
