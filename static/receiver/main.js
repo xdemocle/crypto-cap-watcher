@@ -2,7 +2,7 @@
  * Main JavaScript for handling Chromecast interactions.
  */
 
-window.onload = function() {
+window.onload = function () {
   cast.receiver.logger.setLevelValue(0);
   window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
   console.log('Starting Receiver Manager');

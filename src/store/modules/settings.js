@@ -41,6 +41,9 @@ const actions = {
     });
 
     return ajaxCall;
+  },
+  updateCastState({ commit }, status) {
+    commit('switchCast', { status });
   }
 };
 
@@ -58,8 +61,8 @@ const mutations = {
   switchShowMillions(state) {
     state.showMillions = !state.showMillions;
   },
-  switchCast(state) {
-    state.cast = !state.cast;
+  switchCast(state, { status }) {
+    state.cast = status;
   },
   resetFullscreen(state) {
     state.fullscreen = false;
