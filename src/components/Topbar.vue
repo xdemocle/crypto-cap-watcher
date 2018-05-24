@@ -71,26 +71,35 @@
         wrap
         align-center
         fluid class="tooltip-container--title">
-        <v-flex xs2 sm4 class="text-xs-left tooltip-container--refresh">
+        <v-flex xs5 sm4 class="text-xs-left tooltip-container--refresh">
           <v-tooltip bottom attach=".tooltip-container--title" content-class="tooltip-content--refresh">
-            <v-btn slot="activator" flat icon @click="refreshData" v-bind:loading="requestProgressHidden">
+            <v-btn slot="activator" icon @click="refreshData" v-bind:loading="requestProgressHidden">
               <v-icon>refresh</v-icon>
             </v-btn>
             <span>Last updated: {{lastUpdate | moment('HH:mm \\G\\M\\TZ')}}</span>
           </v-tooltip>
         </v-flex>
-        <v-flex xs8 sm4 class="text-xs-center">
+        <v-flex xs2 sm4 class="text-xs-center">
           <v-tooltip bottom max-width="25rem" min-width="25rem" attach=".tooltip-container--title" content-class="tooltip-content--title">
-            <v-toolbar-title slot="activator" class="headline ml-0">{{siteName}}</v-toolbar-title>
+            <v-toolbar-title slot="activator" class="headline ml-0">
+              <span class="hidden-xs-only">{{siteName}}</span>
+              <span class="hidden-sm-and-up">{{siteShortName}}</span>
+            </v-toolbar-title>
             <div class="text-xs-center">{{siteDescription}}</div>
           </v-tooltip>
         </v-flex>
-        <v-flex xs2 sm4 class="text-xs-right menu-container--dropdown">
+        <v-flex xs5 sm4 class="text-xs-right menu-container--dropdown tooltip-container--cast">
+          <v-tooltip bottom attach=".tooltip-container--cast" content-class="tooltip-content--cast">
+            <v-btn slot="activator" icon @click="toggleCastIcon">
+              <v-icon :color="castConnected ? 'blue' : 'inherit'">{{castConnected ? 'cast_connected' : 'cast'}}</v-icon>
+            </v-btn>
+            <span>Cast to Google Chromecast</span>
+          </v-tooltip>
           <v-btn slot="activator" icon @click="drawer = !drawer">
             <v-icon>more_vert</v-icon>
           </v-btn>
         </v-flex>
-        <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
+
         <v-dialog v-model="throttlingDialog" max-width="30rem">
           <v-card>
             <v-card-title>
@@ -119,6 +128,7 @@
           </v-card>
         </v-dialog>
       </v-layout>
+      <v-progress-linear height="1" v-bind:indeterminate="true" v-show="requestProgressHidden" class="topbar-request-progress"></v-progress-linear>
     </v-toolbar>
   </div>
 </template>
@@ -126,6 +136,103 @@
 <script>
   import _ from 'lodash';
   import store from '../store';
+
+
+/**
+ * Main JavaScript for handling Chromecast interactions.
+ */
+
+var applicationID = 'C31048A8';
+var namespace = 'urn:x-cast:com.boombatower.chromecast-dashboard';
+var session = null;
+
+if (!chrome.cast || !chrome.cast.isAvailable) {
+  setTimeout(initializeCastApi, 1000);
+}
+
+function initializeCastApi() {
+  var sessionRequest = new chrome.cast.SessionRequest(applicationID);
+  var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
+    sessionListener,
+    receiverListener);
+
+  chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+};
+
+function onInitSuccess() {
+  console.log('onInitSuccess');
+}
+
+function onError(message) {
+  console.log('onError: ' + JSON.stringify(message));
+}
+
+function onSuccess(message) {
+  console.log('onSuccess: ' + JSON.stringify(message));
+
+  if (message['type'] == 'load') {
+    $('#kill').prop('disabled', false);
+    $('#post-note').show();
+  }
+}
+
+function onStopAppSuccess() {
+  console.log('onStopAppSuccess');
+
+  $('#kill').prop('disabled', true);
+  $('#post-note').hide();
+}
+
+function sessionListener(e) {
+  console.log('New session ID: ' + e.sessionId);
+  session = e;
+  session.addUpdateListener(sessionUpdateListener);
+}
+
+function sessionUpdateListener(isAlive) {
+  console.log((isAlive ? 'Session Updated' : 'Session Removed') + ': ' + session.sessionId);
+  if (!isAlive) {
+    session = null;
+  }
+};
+
+function receiverListener(e) {
+  if (e !== 'available') {
+    alert('No Chromecast receivers available');
+  }
+}
+
+function sendMessage(message) {
+  if (session != null) {
+    session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
+  }
+  else {
+    chrome.cast.requestSession(function(e) {
+      session = e;
+      sessionListener(e);
+      session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
+    }, onError);
+  }
+}
+
+function stopApp() {
+  session.stop(onStopAppSuccess, onError);
+}
+
+function connect(url, refresh) {
+  console.log('connect()');
+  sendMessage({
+    type: 'load',
+    url: url,
+    refresh: 0
+  });
+}
+        // const chromecastSender = chromecast.createSender({
+        //   applicationID: 'C31048A8',
+        //   namespace: 'urn:x-cast:com.google.cast.sample.helloworld'
+        // });
+
+// $('#kill').on('click', stopApp);
 
   export default {
     name: 'Topbar',
@@ -149,6 +256,9 @@
       },
       siteName() {
         return store.state.constants.name;
+      },
+      siteShortName() {
+        return store.state.constants.shortName;
       },
       siteDescription() {
         return store.state.constants.description;
@@ -197,6 +307,9 @@
           return null;
         }
         return _.orderBy(store.state.settings.config.timing, 'id');
+      },
+      castConnected() {
+        return store.state.settings.cast;
       }
     },
     methods: {
@@ -212,6 +325,10 @@
       },
       toggleCardVisibility(id) {
         this.$store.dispatch('updateConfigTiming', id);
+      },
+      toggleCastIcon() {
+        connect('https://cryptocap.watch/');
+        return store.commit('switchCast');
       }
     }
   };
@@ -226,8 +343,10 @@
 
   .tooltip-container--refresh,
   .tooltip-container--title,
+  .tooltip-container--cast,
   .menu-container--dropdown {
     position: relative;
+    margin-left: 0 !important;
   }
 
   .tooltip-content--refresh {
@@ -240,6 +359,12 @@
     left: 50% !important;
     margin-left: -12.5rem;
     min-width: 25rem;
+  }
+
+  .tooltip-content--cast {
+    top: 100% !important;
+    right: 2rem !important;
+    left: auto !important;
   }
 
   .menu-container--dropdown .menu__content {

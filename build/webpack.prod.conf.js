@@ -231,7 +231,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         }
       ],
       bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>(function() { if(\'serviceWorker\' in navigator) { navigator.serviceWorker.register(\'/service-worker.js\'); }})();</script>',
-      headHtmlSnippet: '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
+      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,
         collapseWhitespace: true,

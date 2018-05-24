@@ -61,7 +61,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       ],
       meta: [],
-      headHtmlSnippet: ''
+      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>',
     })
   ]
 })
