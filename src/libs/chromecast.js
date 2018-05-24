@@ -7,7 +7,7 @@ const { chrome } = window;
 function ChromeCast(params) {
   const { log } = console;
   const that = this;
-  const { applicationID, namespace } = params;
+  const { applicationId, namespace } = params;
 
   let sessionRequest = null;
   let apiConfig = null;
@@ -19,7 +19,7 @@ function ChromeCast(params) {
       return;
     }
 
-    sessionRequest = new chrome.cast.SessionRequest(applicationID);
+    sessionRequest = new chrome.cast.SessionRequest(applicationId);
 
     apiConfig = new chrome.cast.ApiConfig(
       sessionRequest,
