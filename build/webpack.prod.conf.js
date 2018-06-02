@@ -246,7 +246,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       // filename: process.env.NODE_ENV === 'testing'
       //   ? 'index.html'
       //   : config.build.index,
-      filename: 'static/receiver/index.html',
+      filename: 'receiver.html',
       template: require('html-webpack-template'),
       inject: false,
       mobile: true,

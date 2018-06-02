@@ -65,7 +65,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>',
     }),
     new HtmlWebpackPlugin({
-      filename: 'static/receiver/index.html',
+      filename: 'receiver.html',
       template: require('html-webpack-template'),
       // Important to be false when used with html-webpack-template
       inject: false,
