@@ -7,7 +7,7 @@ import moment from 'moment-timezone';
 import fullscreen from 'vue-fullscreen';
 import socketio from 'socket.io-client';
 import VueSocketio from 'vue-socket.io';
-import VueChromecast from '@/libs/vue-chromecast';
+import VueChromecastPlugin from 'vue-chromecast-plugin';
 
 // Helpers
 import colors from 'vuetify/es5/util/colors';
@@ -30,7 +30,7 @@ Vue.use(VueMoment, {
 
 Vue.use(fullscreen);
 
-Vue.use(VueChromecast, {
+Vue.use(VueChromecastPlugin, {
   applicationId: store.state.constants.chromecastApplicationId,
   applicationName: store.state.constants.name,
   applicationNamespace: store.state.constants.namespace

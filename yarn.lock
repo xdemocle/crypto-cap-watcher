@@ -8514,6 +8514,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-chromecast-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-chromecast-plugin/-/vue-chromecast-plugin-1.0.0.tgz#6e6925e2d43cbe965160f6c1efd98b7e9e47d555"
+
 vue-currency-filter@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/vue-currency-filter/-/vue-currency-filter-2.2.0.tgz#fa1402015ca6b76158fc2f9edf400a24bed0c486"
