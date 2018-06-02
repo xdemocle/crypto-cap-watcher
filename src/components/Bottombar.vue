@@ -49,8 +49,6 @@
 </template>
 
 <script>
-  import store from '../store';
-
   export default {
     name: 'Bottombar',
     data: () => ({
@@ -58,11 +56,11 @@
     }),
     computed: {
       counterSeconds() {
-        return store.state.history.secondsLeft;
+        return this.$store.state.history.secondsLeft;
       },
       connectionOffline: {
         get() {
-          return !store.state.status.online;
+          return !this.$store.state.status.online;
         },
         set() {
           return null;

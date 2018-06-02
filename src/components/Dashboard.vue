@@ -159,7 +159,6 @@
   /* eslint no-unused-vars: 0 */
   import ScrollToPlugin from 'gsap/ScrollToPlugin';
   import { mapGetters } from 'vuex';
-  import store from '../store';
 
   export default {
     name: 'Dashboard',
@@ -184,29 +183,29 @@
           that.fadeToggle = false;
         }, 300);
 
-        return store.state.history.last_updated || Date.now();
+        return this.$store.state.history.last_updated || Date.now();
       },
       showCardsHint() {
-        if (!store.state.settings.config || !store.state.settings.config.timing) {
+        if (!this.$store.state.settings.config || !this.$store.state.settings.config.timing) {
           return false;
         }
-        return !_.find(store.state.settings.config.timing, { visible: true });
+        return !_.find(this.$store.state.settings.config.timing, { visible: true });
       },
       showTether() {
-        return store.state.settings.tether;
+        return this.$store.state.settings.tether;
       },
       tickers() {
-        return store.state.tickers.updates;
+        return this.$store.state.tickers.updates;
       },
       isChromecast() {
-        return store.state.status.isChromecast;
+        return this.$store.state.status.isChromecast;
       }
     },
     methods: {
       currencyDisplay(value) {
         const val = Number(value);
 
-        if (store.state.settings.showMillions) {
+        if (this.$store.state.settings.showMillions) {
           return [this.$options.filters.currency(val / 1000000), 'MM'].join('');
         }
 
@@ -222,11 +221,11 @@
         return direction === 'down' ? 'red--text' : 'green--text';
       },
       getCard(id) {
-        if (!store.state.settings.config || !store.state.settings.config.timing) {
+        if (!this.$store.state.settings.config || !this.$store.state.settings.config.timing) {
           return false;
         }
 
-        return _.find(store.state.settings.config.timing, { id });
+        return _.find(this.$store.state.settings.config.timing, { id });
       },
       cardVisibility(id) {
         const item = this.getCard(id);
@@ -248,7 +247,7 @@
       priceClass(symbol) {
         let flag = 4;
 
-        const coin = store.state.tickers.updates[symbol];
+        const coin = this.$store.state.tickers.updates[symbol];
 
         if (coin && coin.FLAGS) {
           flag = Number(coin.FLAGS);
@@ -262,7 +261,7 @@
         };
       },
       priceArrow24Hour(symbol) {
-        const coin = store.state.tickers.updates[symbol];
+        const coin = this.$store.state.tickers.updates[symbol];
 
         if (!coin || (!coin.CHANGE24HOURPCT && !coin.percent_change_24h)) {
           return 'up';

@@ -136,7 +136,8 @@
 
 <script>
   import _ from 'lodash';
-  import store from '../store';
+
+  const { chrome } = window;
 
   export default {
     name: 'Topbar',
@@ -149,7 +150,7 @@
     computed: {
       themeSwitch: {
         get() {
-          return store.state.settings.theme;
+          return this.$store.state.settings.theme;
         },
         set() {
           if (this.castConnected) {
@@ -159,38 +160,38 @@
             });
           }
 
-          return store.commit('switchTheme');
+          return this.$store.commit('switchTheme');
         }
       },
       themeLabel() {
-        return store.state.settings.theme ? 'Night' : 'Day';
+        return this.$store.state.settings.theme ? 'Night' : 'Day';
       },
       siteName() {
-        return store.state.constants.name;
+        return this.$store.state.constants.name;
       },
       siteShortName() {
-        return store.state.constants.shortName;
+        return this.$store.state.constants.shortName;
       },
       siteDescription() {
-        return store.state.constants.description;
+        return this.$store.state.constants.description;
       },
       fullscreenSwitch: {
         get() {
-          return store.state.settings.fullscreen;
+          return this.$store.state.settings.fullscreen;
         },
         set() {
-          if (store.state.settings.fullscreen) {
+          if (this.$store.state.settings.fullscreen) {
             this.$fullscreen.exit();
           } else {
             this.$fullscreen.enter();
           }
 
-          return store.commit('switchFullscreen');
+          return this.$store.commit('switchFullscreen');
         }
       },
       showMillionsSwitch: {
         get() {
-          return store.state.settings.showMillions;
+          return this.$store.state.settings.showMillions;
         },
         set() {
           if (this.castConnected) {
@@ -200,12 +201,12 @@
             });
           }
 
-          return store.commit('switchShowMillions');
+          return this.$store.commit('switchShowMillions');
         }
       },
       tetherSwitch: {
         get() {
-          return store.state.settings.tether;
+          return this.$store.state.settings.tether;
         },
         set() {
           if (this.castConnected) {
@@ -215,42 +216,42 @@
             });
           }
 
-          return store.commit('switchTether');
+          return this.$store.commit('switchTether');
         }
       },
       requestProgressHidden() {
-        return store.state.history.requestBusy;
+        return this.$store.state.history.requestBusy;
       },
       lastUpdate() {
-        return store.state.history.last_updated || Date.now();
+        return this.$store.state.history.last_updated || Date.now();
       },
       secondsThrottling() {
-        return store.state.constants.secondsThrottling;
+        return this.$store.state.constants.secondsThrottling;
       },
       timingSorted() {
-        if (!store.state.settings.config) {
+        if (!this.$store.state.settings.config) {
           return null;
         }
-        return _.orderBy(store.state.settings.config.timing, 'id');
+        return _.orderBy(this.$store.state.settings.config.timing, 'id');
       },
       castConnected() {
-        return store.state.status.casting;
+        return this.$store.state.status.casting;
       },
       isChromecast() {
-        return store.state.status.isChromecast;
+        return this.$store.state.status.isChromecast;
       },
       castButtonVisibility() {
-        return store.state.status.castButtonVisibility;
+        return this.$store.state.status.castButtonVisibility;
       }
     },
     methods: {
       refreshData() {
-        if (!store.state.status.online) {
+        if (!this.$store.state.status.online) {
           this.offlineDialog = true;
           return;
         }
 
-        store.dispatch('getdata').then((response) => {
+        this.$store.dispatch('getdata').then((response) => {
           this.throttlingDialog = response === 'throttling' || false;
 
           if (this.castConnected) {
@@ -259,10 +260,10 @@
         });
       },
       toggleCardVisibility(id) {
-        store.dispatch('updateConfigTiming', { id }).then(() => {
+        this.$store.dispatch('updateConfigTiming', { id }).then(() => {
           // We send a sync command to the chromecast receiver
           if (this.castConnected) {
-            const timing = _.find(store.state.settings.config.timing, { id });
+            const timing = _.find(this.$store.state.settings.config.timing, { id });
             const status = timing.visible || false;
 
             this.$chromecast.Sender.sendMessage({
@@ -273,17 +274,17 @@
         });
       },
       toggleCastIcon() {
-        if (store.state.status.casting) {
-          this.$chromecast.Sender.stopCasting(() => {
-            store.dispatch('updateCastState', 0);
-          });
+        if (this.$store.state.status.casting) {
+          this.$chromecast.Sender.stopCasting();
         } else {
-          // Send null for loading state
-          store.dispatch('updateCastState', 1);
-          this.$chromecast.Sender.cast(() => {
-            store.dispatch('updateCastState', 2);
-          });
+          this.$chromecast.Sender.cast();
         }
+      }
+    },
+    created() {
+      // Check if the browser isn't Chrome and deactivate the ChromeCast icon
+      if (!chrome) {
+        this.$store.dispatch('updateCastButtonVisibilityState', false);
       }
     }
   };

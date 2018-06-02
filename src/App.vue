@@ -27,16 +27,16 @@
     }),
     computed: {
       theme() {
-        return store.state.settings.theme;
+        return this.$store.state.settings.theme;
       },
       pageActive() {
-        return store.state.status.pageActive;
+        return this.$store.state.status.pageActive;
       },
       connectionOffline() {
-        return !store.state.status.online;
+        return !this.$store.state.status.online;
       },
       isChromecast() {
-        return store.state.status.isChromecast;
+        return this.$store.state.status.isChromecast;
       }
     },
     components: {
@@ -158,7 +158,7 @@
     mounted() {
       // If is a chromecast device we force the hide of the button
       if (this.$chromecast.Receiver) {
-        store.dispatch('updateCastButtonVisibilityState', false);
+        this.$store.dispatch('updateCastButtonVisibilityState', false);
       }
 
       this.$chromecast.$on('message', (message) => {
@@ -174,14 +174,16 @@
       });
 
       this.$chromecast.$on('sessionUpdate', (status) => {
-        // Default for cancel/removed state or error
+        // Default for cancel/removed state or error or disconnected
         let statusCode = 0;
 
         if (status === 'new' || status === 'updated') {
           statusCode = 2;
+        } else if (status === 'connecting' || status === 'disconnecting') {
+          statusCode = 1;
         }
 
-        store.dispatch('updateCastState', statusCode);
+        this.$store.dispatch('updateCastState', statusCode);
       });
     },
     watch: {
