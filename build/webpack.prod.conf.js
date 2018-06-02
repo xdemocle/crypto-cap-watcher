@@ -69,7 +69,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       // filename: process.env.NODE_ENV === 'testing'
       //   ? 'index.html'
       //   : config.build.index,
-      // template: 'index.html',
+      filename: 'index.html',
       template: require('html-webpack-template'),
       inject: false,
       mobile: true,
@@ -232,6 +232,183 @@ const webpackConfig = merge(baseWebpackConfig, {
       ],
       bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>(function() { if(\'serviceWorker\' in navigator) { navigator.serviceWorker.register(\'/service-worker.js\'); }})();</script>',
       headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      // filename: process.env.NODE_ENV === 'testing'
+      //   ? 'index.html'
+      //   : config.build.index,
+      filename: 'index.html',
+      template: require('html-webpack-template'),
+      inject: false,
+      mobile: true,
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
+        {
+          href: '/favicon.ico',
+          rel: 'shortcut icon'
+        },
+        {
+          href: '/manifest.json',
+          rel: 'manifest'
+        },
+        {
+          href: '/static/android-icon-192x192.png',
+          rel: 'icon',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          href: '/static/favicon-32x32.png',
+          rel: 'icon',
+          sizes: '32x32',
+          type: 'image/png'
+        },
+        {
+          href: '/static/favicon-96x96.png',
+          rel: 'icon',
+          sizes: '96x96',
+          type: 'image/png'
+        },
+        {
+          href: '/static/favicon-16x16.png',
+          rel: 'icon',
+          sizes: '16x16',
+          type: 'image/png'
+        },
+        {
+          href: '/static/apple-icon-57x57.png',
+          rel: 'apple-touch-icon',
+          sizes: '57x57'
+        },
+        {
+          href: '/static/apple-icon-60x60.png',
+          rel: 'apple-touch-icon',
+          sizes: '60x60'
+        },
+        {
+          href: '/static/apple-icon-72x72.png',
+          rel: 'apple-touch-icon',
+          sizes: '72x72'
+        },
+        {
+          href: '/static/apple-icon-76x76.png',
+          rel: 'apple-touch-icon',
+          sizes: '76x76'
+        },
+        {
+          href: '/static/apple-icon-114x114.png',
+          rel: 'apple-touch-icon',
+          sizes: '114x114'
+        },
+        {
+          href: '/static/apple-icon-120x120.png',
+          rel: 'apple-touch-icon',
+          sizes: '120x120'
+        },
+        {
+          href: '/static/apple-icon-144x144.png',
+          rel: 'apple-touch-icon',
+          sizes: '144x144'
+        },
+        {
+          href: '/static/apple-icon-152x152.png',
+          rel: 'apple-touch-icon',
+          sizes: '152x152'
+        },
+        {
+          href: '/static/apple-icon-180x180.png',
+          rel: 'apple-touch-icon',
+          sizes: '180x180'
+        }
+      ],
+      appMountId: 'app',
+      // appMountHtmlSnippet: '<div id="app"></div>',
+      title: 'Crypto Cap Watcher | A tool for monitoring crypto currencies global market capitalization and Bitcoin data',
+      meta: [
+        {
+          name: 'description',
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'canonical',
+          content: 'https://cryptocap.watch'
+        },
+        {
+          name: 'apple-mobile-web-app-capable',
+          content: 'yes'
+        },
+        {
+          name: 'apple-mobile-web-app-title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: '#ffffff'
+        },
+        {
+          name: 'theme-color',
+          content: '#ffffff'
+        },
+        {
+          name: 'msapplication-TileColor',
+          content: '#ffffff'
+        },
+        {
+          name: 'msapplication-TileImage',
+          content: '/static/ms-icon-144x144.png'
+        },
+        {
+          name: 'og:title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'og:type',
+          content: 'website'
+        },
+        {
+          name: 'og:image',
+          content: 'https://cryptocap.watch/static/android-icon-192x192.png'
+        },
+        {
+          name: 'og:url',
+          content: 'https://cryptocap.watch/'
+        },
+        {
+          name: 'og:description',
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'twitter:card',
+          content: 'summary'
+        },
+        {
+          name: 'twitter:url',
+          content: 'https://cryptocap.watch/'
+        },
+        {
+          name: 'twitter:title',
+          content: 'Crypto Cap Watcher'
+        },
+        {
+          name: 'twitter:description',
+          content: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.'
+        },
+        {
+          name: 'twitter:image',
+          content: 'https://cryptocap.watch/static/android-icon-192x192.png'
+        }
+      ],
+      bodyHtmlSnippet: '<noscript>Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.</noscript><script>(function() { if(\'serviceWorker\' in navigator) { navigator.serviceWorker.register(\'/service-worker.js\'); }})();</script>',
+      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-63832089-2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'UA-63832089-2\');</script>',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
