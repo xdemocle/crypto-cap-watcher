@@ -49,6 +49,7 @@
     "file-loader": "^1.1.4",
     "fontfaceobserver": "^2.0.13",
     "friendly-errors-webpack-plugin": "^1.6.1",
+    "gsap": "^2.0.1",
     "html-webpack-plugin": "^2.30.1",
     "html-webpack-template": "^6.1.0",
     "jest": "^21.2.0",

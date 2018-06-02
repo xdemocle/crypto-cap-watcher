@@ -1,10 +1,11 @@
 <template>
-  <v-container fluid text-xs-center>
+  <v-container fluid text-xs-center class="dashboard__container">
     <v-layout
       row
       wrap
       fill-height
-      fluid>
+      fluid
+      class="dashboard__header">
 
       <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
         <v-card class="py-3">
@@ -87,7 +88,8 @@
       row
       wrap
       fill-height
-      fluid>
+      fluid
+      class="dashboard__body">
 
       <v-scale-transition>
         <v-flex xs12 sm3 md3 px-2 py-2 v-show="showCardsHint">
@@ -153,6 +155,9 @@
 
 <script>
   import _ from 'lodash';
+  import { TweenMax, Power2 } from 'gsap/TweenMax';
+  /* eslint no-unused-vars: 0 */
+  import ScrollToPlugin from 'gsap/ScrollToPlugin';
   import { mapGetters } from 'vuex';
   import store from '../store';
 
@@ -192,6 +197,9 @@
       },
       tickers() {
         return store.state.tickers.updates;
+      },
+      isChromecast() {
+        return store.state.status.isChromecast;
       }
     },
     methods: {
@@ -261,6 +269,18 @@
         }
 
         return (coin.CHANGE24HOURPCT || coin.percent_change_24h) < 0 ? 'down' : 'up';
+      }
+    },
+    mounted() {
+      if (this.isChromecast) {
+        setTimeout(() => {
+          TweenMax.to('.dashboard__body', 7, {
+            scrollTo: { y: 'max' },
+            repeat: -1,
+            yoyo: true,
+            ease: Power2.easeInOut
+          });
+        }, 3000);
       }
     }
   };

@@ -44,7 +44,8 @@ Vue.use(Vuetify, {
   }
 });
 
-Vue.config.productionTip = process.env.NODE_ENV;
+// Vue.config.productionTip = process.env.NODE_ENV;
+Vue.config.productionTip = 'production';
 
 window.Vue = Vue;
 

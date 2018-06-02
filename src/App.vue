@@ -10,6 +10,7 @@
 
 <script>
   import _ from 'lodash';
+  import Vue from 'vue';
   import FontFaceObserver from 'fontfaceobserver';
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
@@ -26,13 +27,16 @@
     }),
     computed: {
       theme() {
-        return this.$store.state.settings.theme;
+        return store.state.settings.theme;
       },
       pageActive() {
-        return this.$store.state.status.pageActive;
+        return store.state.status.pageActive;
       },
       connectionOffline() {
-        return !this.$store.state.status.online;
+        return !store.state.status.online;
+      },
+      isChromecast() {
+        return store.state.status.isChromecast;
       }
     },
     components: {
@@ -69,6 +73,13 @@
       },
       onResize() {
         this.$store.dispatch('updateIsChromecast', this.checkIfChromecast());
+
+        // Update
+        if (this.isChromecast) {
+          Vue.nextTick(() => {
+            this.updateDashboardBody();
+          });
+        }
       },
       checkIfChromecast() {
         const isChromecast = navigator.userAgent.indexOf('CrKey') !== -1;
@@ -80,6 +91,18 @@
         }
 
         return isChromecast;
+      },
+      updateDashboardBody() {
+        const pageDocument = document.querySelector('html');
+        const dashboardHeader = document.querySelector('.dashboard__header');
+        const dashboardBody = document.querySelector('.dashboard__body');
+        const pageFooter = document.querySelector('footer.footer');
+
+        const dashboardBodyHeight = pageDocument.clientHeight -
+          dashboardHeader.clientHeight - pageFooter.clientHeight;
+
+        dashboardBody.style.setProperty('height', dashboardBodyHeight);
+        dashboardBody.style.height = `${dashboardBodyHeight}px`;
       }
     },
     created() {
@@ -183,7 +206,24 @@
 
   // Styling for chromcast devices
   html.is-chromecast {
+    overflow: hidden;
     font-size: 12px !important;
+
+    .dashboard {
+      &__container {
+        padding: 0;
+      }
+
+      &__header {
+        flex: 0 0 auto;
+      }
+
+      &__body {
+        height: 80vh;
+        flex: 1 1 auto;
+        overflow-y: scroll;
+      }
+    }
 
     .toolbar .toolbar__content {
       height: 1px !important;
