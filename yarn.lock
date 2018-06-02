@@ -8514,10 +8514,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-axios@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.1.tgz#6167f2db93065d9bcfc90e65d063ccf34f8b1d63"
-
 vue-currency-filter@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/vue-currency-filter/-/vue-currency-filter-2.2.0.tgz#fa1402015ca6b76158fc2f9edf400a24bed0c486"

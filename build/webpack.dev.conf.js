@@ -25,6 +25,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     clientLogLevel: 'warning',
     historyApiFallback: true,
     hot: true,
+    https: config.dev.https,
     compress: true,
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
@@ -49,9 +50,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      // filename: 'index.html',
-      // template: 'index.html',
+      filename: 'index.html',
       template: require('html-webpack-template'),
+      // Important to be false when used with html-webpack-template
       inject: false,
       mobile: true,
       appMountId: 'app',
@@ -62,6 +63,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       ],
       meta: [],
       headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'static/receiver/index.html',
+      template: require('html-webpack-template'),
+      // Important to be false when used with html-webpack-template
+      inject: false,
+      mobile: true,
+      appMountId: 'app',
+      // appMountHtmlSnippet: '<div id="app"></div>',
+      title: 'Crypto Cap Watcher',
+      links: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
+      ],
+      meta: [],
+      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>',
     })
   ]
 })
