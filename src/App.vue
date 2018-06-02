@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" :dark="theme" :class="appClass">
+  <v-app id="app" :dark="theme" ref="appcomponent" :class="appClass.join(' ')">
     <topbar></topbar>
     <v-content>
       <dashboard></dashboard>
@@ -9,16 +9,20 @@
 </template>
 
 <script>
+  import _ from 'lodash';
   import FontFaceObserver from 'fontfaceobserver';
   import Topbar from '@/components/Topbar';
   import Bottombar from '@/components/Bottombar';
   import Dashboard from '@/components/Dashboard';
+  import store from './store';
 
   let intervalChecker = null;
 
   export default {
     data: () => ({
-      appClass: 'material-icons-notready'
+      appClass: [
+        'material-icons-notready'
+      ]
     }),
     computed: {
       theme() {
@@ -36,20 +40,59 @@
       Bottombar,
       Dashboard
     },
-    created() {
-      const that = this;
+    methods: {
+      bootstrap() {
+        // First get remote settings than start the setInterval for updating
+        // local data from history and secondsLeft from next request.
+        this.$store.dispatch('getsettings', () => {
+          if (!intervalChecker) {
+            intervalChecker = window.setInterval(this.updateSecondsLeft, 1000);
+          }
+        }).catch(() => {
+          // If network error try again with setTimeout
+          setTimeout(this.bootstrap, 1500);
+        });
 
+        // Trigger onResize window event
+        this.onResize();
+      },
+      getdata(forced) {
+        return this.$store.dispatch('getdata', forced);
+      },
+      updateSecondsLeft() {
+        // Run at interval a new request
+        if (this.$store.state.history.secondsLeft <= 1) {
+          return this.getdata();
+        }
+
+        return this.$store.dispatch('updateSecondsLeft');
+      },
+      onResize() {
+        this.$store.dispatch('updateIsChromecast', this.checkIfChromecast());
+      },
+      checkIfChromecast() {
+        const isChromecast = navigator.userAgent.indexOf('CrKey') !== -1;
+
+        if (isChromecast) {
+          document.querySelector('html').classList.add('is-chromecast');
+        } else {
+          document.querySelector('html').classList.remove('is-chromecast');
+        }
+
+        return isChromecast;
+      }
+    },
+    created() {
       // Font face observer for material icons
       const materialIconsObserver = new FontFaceObserver('Material Icons');
       materialIconsObserver.load().then(() => {
-        that.appClass = that.appClass.replace(
-          'material-icons-notready',
-          'material-icons-ready'
-        );
+        const index = this.appClass.indexOf('material-icons-notready');
+        this.appClass.splice(index, 1);
+        this.appClass.push('material-icons-ready');
       });
 
-      // Initialize store container for internet and app status
-      this.$store.dispatch('initializeStatus');
+      // Initialize store container for internet, app status and window events
+      this.$store.dispatch('initializeStatus', this.onResize);
 
       // Always restore fullscreen flag at bootstrap
       this.$store.commit('resetFullscreen');
@@ -62,63 +105,61 @@
       // Subscribe to cryptocompare websocket for bitcoin price
       this.$store.subscribe((mutation, state) => {
         if (mutation && mutation.type === 'SOCKET_CONNECT') {
-          that.$socket.emit('SubAdd', {
+          this.$socket.emit('SubAdd', {
             subs: state.constants.wsCccSubscriptions
           });
 
-          window.socket = that.$socket;
+          window.socket = this.$socket;
         }
-
-        // if (mutation && mutation.type === 'SOCKET_DISCONNECT') {
-
-        // }
       });
 
       // Subscribe to getdata action in order to retrieve make another call
       this.$store.subscribeAction((action) => {
         if (action.type === 'getdata') {
           if (this.$store.state.status.online) {
-            that.$store.dispatch('getTickerData', 'tether');
+            this.$store.dispatch('getTickerData', 'tether');
           } else {
             // If network error try again
-            setTimeout(that.getdata, 1500);
+            setTimeout(this.getdata, 1500);
           }
         } else if (action.type === 'getTickerData') {
           if (!this.$store.state.status.online) {
             // If network error try again
             setTimeout(() => {
-              that.$store.dispatch('getTickerData', 'tether');
+              this.$store.dispatch('getTickerData', 'tether');
             }, 1500);
           }
         }
       });
     },
-    methods: {
-      bootstrap() {
-        const that = this;
+    mounted() {
+      // If is a chromecast device we force the hide of the button
+      if (this.$chromecast.Receiver) {
+        store.dispatch('updateCastButtonVisibilityState', false);
+      }
 
-        // First get remote settings than start the setInterval for updating
-        // local data from history and secondsLeft from next request.
-        this.$store.dispatch('getsettings', () => {
-          if (!intervalChecker) {
-            intervalChecker = window.setInterval(that.updateSecondsLeft, 1000);
-          }
-        }).catch(() => {
-          // If network error try again with setTimeout
-          setTimeout(that.bootstrap, 1500);
-        });
-      },
-      getdata(forced) {
-        return this.$store.dispatch('getdata', forced);
-      },
-      updateSecondsLeft() {
-        // Run at interval a new request
-        if (this.$store.state.history.secondsLeft <= 1) {
-          return this.getdata();
+      this.$chromecast.$on('message', (message) => {
+        let data = message;
+
+        if (_.isString(message)) {
+          data = JSON.parse(message);
         }
 
-        return this.$store.dispatch('updateSecondsLeft');
-      }
+        data.context = !data.context ? 'dispatch' : data.context;
+
+        store[data.context](data.method, data.payload);
+      });
+
+      this.$chromecast.$on('sessionUpdate', (status) => {
+        // Default for cancel/removed state or error
+        let statusCode = 0;
+
+        if (status === 'new' || status === 'updated') {
+          statusCode = 2;
+        }
+
+        store.dispatch('updateCastState', statusCode);
+      });
     },
     watch: {
       pageActive(status) {
@@ -138,6 +179,31 @@
 
   .opa-a {
     opacity: 0;
+  }
+
+  // Styling for chromcast devices
+  html.is-chromecast {
+    font-size: 12px !important;
+
+    .toolbar .toolbar__content {
+      height: 1px !important;
+
+      .progress-linear {
+        height: 1px !important;
+      }
+
+      & > .layout {
+        display: none;
+      }
+    }
+
+    main.content {
+      padding-top: 0 !important;
+    }
+
+    .hidden-if-chromecast {
+      display: none !important;
+    }
   }
 </style>
 

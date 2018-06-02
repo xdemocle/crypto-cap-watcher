@@ -11,8 +11,8 @@
       <v-flex sm6 class="hidden-xs-only text-xs-center text-sm-right ellipsis">
         <p class="mb-0 text-muted" style="position: relative;">
           Data served by <a href="https://coinmarketcap.com" target="_new" title="coinmarketcap.com">CMC</a> and
-          <a href="https://cryptocompare.com" target="_new" title="cryptocompare.com">CC</a> |
-          Hosted on <a href="https://github.com/xdemocle/crypto-cap-watcher" target="_new" class="text-decoration-none">Github</a>
+          <a href="https://cryptocompare.com" target="_new" title="cryptocompare.com">CC</a> -
+          <a href="https://github.com/xdemocle/crypto-cap-watcher" target="_new" class="text-decoration-none">Crypto Cap Watcher</a>
           <v-tooltip top>
             <a slot="activator" href="https://github.com/xdemocle/crypto-cap-watcher/issues" target="_new" class="text-decoration-none"><v-icon class="ml-1 hidden-xs-only">help_outline</v-icon></a>
             <span>Open a support ticket or send a bug on Github</span>

@@ -1,14 +1,13 @@
-/* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
+import axios from 'axios';
 import _ from 'lodash';
 
-// initial state
-const state = {
+// initial states
+const states = {
   theme: true,
   fullscreen: false,
   tether: false,
   showMillions: true,
-  cast: false,
   config: {}
 };
 
@@ -18,32 +17,30 @@ const getters = {
   fullscreen: state => state.fullscreen,
   tether: state => state.tether,
   showMillions: state => state.showMillions,
-  cast: state => state.cast,
   config: state => state.config
 };
 
 // actions
 const actions = {
-  updateConfigTiming({ commit, state }, id) {
+  updateConfigTiming({ commit, state }, { id, status }) {
     const timing = _.clone(state.config.timing);
     const index = _.findIndex(timing, { id });
+    let visible = timing[index].visible || false;
 
-    const visible = !timing[index].visible;
+    // We force the param status or we toggle visible prop
+    visible = !_.isUndefined(status) ? status : !visible;
 
     commit('setTimingWrapper', { index, visible });
   },
   getsettings({ commit, rootState }, callback) {
     const url = [rootState.constants.apiUrl(), '/settings'].join('');
-    const ajaxCall = Vue.axios.get(url);
+    const ajaxCall = axios.get(url);
 
     ajaxCall.then((response) => {
       commit('setConfig', { response, callback });
     });
 
     return ajaxCall;
-  },
-  updateCastState({ commit }, status) {
-    commit('switchCast', { status });
   }
 };
 
@@ -61,9 +58,6 @@ const mutations = {
   switchShowMillions(state) {
     state.showMillions = !state.showMillions;
   },
-  switchCast(state, { status }) {
-    state.cast = status;
-  },
   resetFullscreen(state) {
     state.fullscreen = false;
   },
@@ -71,7 +65,7 @@ const mutations = {
     const { checkEachMinutes } = response.data;
 
     // Don't look at the two iterators below, your eyes could bleeds :D
-    if (state.config.timing) {
+    if (state.config && state.config.timing) {
       _.each(state.config.timing, (timing, index) => {
         if (timing) {
           const item = _.find(response.data.timing, { id: timing.id });
@@ -105,7 +99,7 @@ const mutations = {
 };
 
 export default {
-  state,
+  states,
   getters,
   actions,
   mutations

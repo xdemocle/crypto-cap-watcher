@@ -1,9 +1,9 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-import Vue from 'vue';
+import axios from 'axios';
 import _ from 'lodash';
 import CCC from '@/libs/ccc';
 
-// initial state
+// initial states
 const state = {
   connect: false,
   updates: {}
@@ -19,7 +19,7 @@ const getters = {
 const actions = {
   getTickerData({ commit, rootState }, id) {
     const url = [rootState.constants.apiUrlCoinmarketcap, '/', id, '/'].join('');
-    const ajaxCall = Vue.axios.get(url);
+    const ajaxCall = axios.get(url);
 
     ajaxCall.then((response) => {
       commit('handleTickerResponse', response.data[0]);

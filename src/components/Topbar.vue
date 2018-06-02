@@ -18,7 +18,7 @@
           <v-list-tile-action>
             <v-switch v-model="themeSwitch" color="purple"></v-switch>
           </v-list-tile-action>
-          <v-list-tile-title>{{theme}} theme</v-list-tile-title>
+          <v-list-tile-title>{{themeLabel}} theme</v-list-tile-title>
         </v-list-tile>
         <v-list-tile>
           <v-list-tile-action>
@@ -90,8 +90,9 @@
         </v-flex>
         <v-flex xs5 sm4 class="text-xs-right menu-container--dropdown tooltip-container--cast">
           <v-tooltip bottom attach=".tooltip-container--cast" content-class="tooltip-content--cast" v-if="castButtonVisibility">
-            <v-btn slot="activator" icon @click="toggleCastIcon">
-              <v-icon :color="castConnected ? 'blue' : 'inherit'">{{castConnected ? 'cast_connected' : 'cast'}}</v-icon>
+            <v-btn slot="activator" icon @click="toggleCastIcon" v-bind:loading="castConnected === 1">
+              <v-icon v-if="castConnected === 2" color="blue">cast_connected</v-icon>
+              <v-icon v-else color="inherit">cast</v-icon>
             </v-btn>
             <span>Cast to Google Chromecast</span>
           </v-tooltip>
@@ -135,7 +136,6 @@
 
 <script>
   import _ from 'lodash';
-  import ChromeCast from '@/libs/chromecast';
   import store from '../store';
 
   export default {
@@ -144,30 +144,25 @@
       fadeToggle: false,
       throttlingDialog: false,
       offlineDialog: false,
-      castButtonVisibility: true,
       drawer: false
     }),
-    mounted() {
-      const that = this;
-
-      this.ChromeSender = new ChromeCast({
-        applicationId: 'C31048A8',
-        namespace: 'urn:x-cast:com.boombatower.chromecast-dashboard',
-        receiverListener: (message) => {
-          that.castButtonVisibility = message !== 'unavailable' && true;
-        }
-      });
-    },
     computed: {
       themeSwitch: {
         get() {
           return store.state.settings.theme;
         },
         set() {
+          if (this.castConnected) {
+            this.$chromecast.Sender.sendMessage({
+              context: 'commit',
+              method: 'switchTheme'
+            });
+          }
+
           return store.commit('switchTheme');
         }
       },
-      theme() {
+      themeLabel() {
         return store.state.settings.theme ? 'Night' : 'Day';
       },
       siteName() {
@@ -198,6 +193,13 @@
           return store.state.settings.showMillions;
         },
         set() {
+          if (this.castConnected) {
+            this.$chromecast.Sender.sendMessage({
+              context: 'commit',
+              method: 'switchShowMillions'
+            });
+          }
+
           return store.commit('switchShowMillions');
         }
       },
@@ -206,6 +208,13 @@
           return store.state.settings.tether;
         },
         set() {
+          if (this.castConnected) {
+            this.$chromecast.Sender.sendMessage({
+              context: 'commit',
+              method: 'switchTether'
+            });
+          }
+
           return store.commit('switchTether');
         }
       },
@@ -225,33 +234,54 @@
         return _.orderBy(store.state.settings.config.timing, 'id');
       },
       castConnected() {
-        return store.state.settings.cast;
+        return store.state.status.casting;
+      },
+      isChromecast() {
+        return store.state.status.isChromecast;
+      },
+      castButtonVisibility() {
+        return store.state.status.castButtonVisibility;
       }
     },
     methods: {
       refreshData() {
-        if (!this.$store.state.status.online) {
+        if (!store.state.status.online) {
           this.offlineDialog = true;
           return;
         }
 
-        this.$store.dispatch('getdata').then((response) => {
+        store.dispatch('getdata').then((response) => {
           this.throttlingDialog = response === 'throttling' || false;
+
+          if (this.castConnected) {
+            this.$chromecast.Sender.sendMessage({ method: 'getdata' });
+          }
         });
       },
       toggleCardVisibility(id) {
-        this.$store.dispatch('updateConfigTiming', id);
+        store.dispatch('updateConfigTiming', { id }).then(() => {
+          // We send a sync command to the chromecast receiver
+          if (this.castConnected) {
+            const timing = _.find(store.state.settings.config.timing, { id });
+            const status = timing.visible || false;
+
+            this.$chromecast.Sender.sendMessage({
+              method: 'updateConfigTiming',
+              payload: { id, status }
+            });
+          }
+        });
       },
       toggleCastIcon() {
-        const that = this;
-
-        if (this.$store.state.settings.cast) {
-          this.ChromeSender.stopApp(() => {
-            that.$store.dispatch('updateCastState', false);
+        if (store.state.status.casting) {
+          this.$chromecast.Sender.stopCasting(() => {
+            store.dispatch('updateCastState', 0);
           });
         } else {
-          this.ChromeSender.cast('https://cryptocap.watch/', () => {
-            that.$store.dispatch('updateCastState', true);
+          // Send null for loading state
+          store.dispatch('updateCastState', 1);
+          this.$chromecast.Sender.cast(() => {
+            store.dispatch('updateCastState', 2);
           });
         }
       }
@@ -259,7 +289,7 @@
   };
 </script>
 
-<style>
+<style lang="scss">
   .topbar-request-progress {
     position: absolute !important;
     bottom: 0;

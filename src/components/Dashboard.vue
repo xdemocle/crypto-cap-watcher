@@ -110,7 +110,7 @@
       <v-scale-transition v-for="(card, index) in historySorted" v-bind:key="index">
         <v-flex d-flex-auto-width xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)">
           <v-card class="py-3" width="100%">
-            <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down">
+            <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down hidden-if-chromecast">
               <v-icon>close</v-icon>
             </v-btn>
             <v-card-text>

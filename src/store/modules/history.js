@@ -1,7 +1,7 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-import Vue from 'vue';
+import axios from 'axios';
 
-// initial state
+// initial states
 const state = {
   requestBusy: false,
   secondsLeft: 0,
@@ -45,7 +45,7 @@ const actions = {
     commit('setbusy', true);
 
     const url = [rootState.constants.apiUrl(), '/statistics'].join('');
-    const ajaxCall = Vue.axios.get(url);
+    const ajaxCall = axios.get(url);
 
     ajaxCall.then((response) => {
       commit('handleResponse', { response, commit });

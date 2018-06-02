@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
@@ -6,8 +7,6 @@ import history from './modules/history';
 import settings from './modules/settings';
 import status from './modules/status';
 import tickers from './modules/tickers';
-
-const _ = require('lodash');
 
 Vue.use(Vuex);
 

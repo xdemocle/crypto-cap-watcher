@@ -1,15 +1,19 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
+import _ from 'lodash';
 import Visibility from 'visibilityjs';
 
-// initial state
+// initial states
 const state = {
   online: false,
-  pageActive: true
+  pageActive: true,
+  isChromecast: false,
+  casting: 0,
+  castButtonVisibility: true
 };
 
 // actions
 const actions = {
-  initializeStatus({ commit }) {
+  initializeStatus({ commit }, onResizeHandler) {
     Visibility.change((e, visible) => {
       commit('setPageActive', visible === 'visible');
     });
@@ -29,6 +33,11 @@ const actions = {
 
       // Also set during bootstrap of the app
       commit('setStatus', window.navigator.onLine);
+
+      // Register an event listener when the Vue app is ready
+      if (onResizeHandler) {
+        window.addEventListener('resize', _.debounce(onResizeHandler, 10));
+      }
     } else {
       // Works in IE with the Work Offline option in the
       // File menu and pulling the ethernet cable
@@ -40,6 +49,15 @@ const actions = {
         commit('setStatus', false);
       };
     }
+  },
+  updateIsChromecast({ commit }, value) {
+    commit('setIsChromecast', value);
+  },
+  updateCastState({ commit }, status) {
+    commit('switchCast', { status });
+  },
+  updateCastButtonVisibilityState({ commit }, status) {
+    commit('switchCastButtonVisibility', { status });
   }
 };
 
@@ -50,6 +68,15 @@ const mutations = {
   },
   setPageActive(state, visibility) {
     state.pageActive = visibility;
+  },
+  setIsChromecast(state, value) {
+    state.isChromecast = value;
+  },
+  switchCast(state, { status }) {
+    state.casting = status;
+  },
+  switchCastButtonVisibility(state, { status }) {
+    state.castButtonVisibility = status;
   }
 };
 

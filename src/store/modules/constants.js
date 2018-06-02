@@ -1,9 +1,12 @@
+/* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import Vue from 'vue';
 
-// initial state
+// initial states
 const state = {
   name: 'Crypto Cap Watcher',
   shortName: 'CCW',
+  namespace: 'urn:x-cast:com.cryptocapwatcher.cryptocapwatcher-dashboard',
+  chromecastApplicationId: 'C31048A8',
   description: 'Crypto Cap Watcher is a web tool for monitoring the crypto currencies global market capitalization, daily aggregated global volume of exchangers and bitcoin dominance over the market.',
   secondsThrottling: 30,
   apiUrl() {
