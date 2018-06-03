@@ -277,7 +277,7 @@
         if (this.$store.state.status.casting) {
           this.$chromecast.Sender.stopCasting();
         } else {
-          this.$chromecast.Sender.cast();
+          this.$chromecast.Sender.casting();
         }
       }
     },
