@@ -62,7 +62,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       ],
       meta: [],
-      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>',
+      headHtmlSnippet: ''
     }),
     new HtmlWebpackPlugin({
       filename: 'receiver.html',
@@ -77,7 +77,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
       ],
       meta: [],
-      headHtmlSnippet: '<script type="text/javascript" src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>',
+      headHtmlSnippet: '',
     })
   ]
 })
@@ -96,7 +96,7 @@ module.exports = new Promise((resolve, reject) => {
       // Add FriendlyErrorsPlugin
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+          messages: [`Your application is running here: https://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
         ? utils.createNotifierCallback()
