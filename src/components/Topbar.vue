@@ -260,9 +260,12 @@
         });
       },
       toggleCardVisibility(id) {
+        const that = this;
+
         this.$store.dispatch('updateConfigTiming', { id }).then(() => {
+          debugger;
           // We send a sync command to the chromecast receiver
-          if (this.castConnected) {
+          if (that.castConnected) {
             const timing = _.find(this.$store.state.settings.config.timing, { id });
             const status = timing.visible || false;
 
@@ -277,7 +280,7 @@
         if (this.$store.state.status.casting) {
           this.$chromecast.Sender.stopCasting();
         } else {
-          this.$chromecast.Sender.cast();
+          this.$chromecast.Sender.casting();
         }
       }
     },

@@ -156,7 +156,7 @@
       });
     },
     mounted() {
-      // If is a chromecast device we force the hide of the button
+      // If is a chromecast device receiver app we force the hiding the button
       if (this.$chromecast.Receiver) {
         this.$store.dispatch('updateCastButtonVisibilityState', false);
       }
@@ -174,7 +174,7 @@
       });
 
       this.$chromecast.$on('sessionUpdate', (status) => {
-        // Default for cancel/removed state or error or disconnected
+        // Default for cancel/removed/timeout state or error or disconnected
         let statusCode = 0;
 
         if (status === 'new' || status === 'updated') {

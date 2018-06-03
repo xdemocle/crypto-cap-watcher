@@ -49,10 +49,6 @@ Vue.config.productionTip = 'production';
 
 window.Vue = Vue;
 
-Vue.prototype.$stocazzo = {
-  name: 'stocazzissimo'
-};
-
 Vue.use(VueSocketio, socketio(store.state.constants.wsLivetimePricesUrl), store);
 
 /* eslint-disable no-new */
