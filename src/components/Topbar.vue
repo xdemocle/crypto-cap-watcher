@@ -260,12 +260,9 @@
         });
       },
       toggleCardVisibility(id) {
-        const that = this;
-
         this.$store.dispatch('updateConfigTiming', { id }).then(() => {
-          debugger;
           // We send a sync command to the chromecast receiver
-          if (that.castConnected) {
+          if (this.castConnected) {
             const timing = _.find(this.$store.state.settings.config.timing, { id });
             const status = timing.visible || false;
 

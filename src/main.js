@@ -31,9 +31,9 @@ Vue.use(VueMoment, {
 Vue.use(fullscreen);
 
 Vue.use(VueChromecastPlugin, {
-  applicationId: store.state.constants.chromecastApplicationId,
-  applicationName: store.state.constants.name,
-  applicationNamespace: store.state.constants.namespace
+  appId: store.state.constants.chromecastApplicationId,
+  appName: store.state.constants.name,
+  appNamespace: store.state.constants.namespace
 });
 
 Vue.use(Vuetify, {
