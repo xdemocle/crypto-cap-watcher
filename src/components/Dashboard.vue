@@ -212,7 +212,7 @@
         return this.$options.filters.currency(val);
       },
       toggleCardVisibility(id) {
-        this.$store.dispatch('updateConfigTiming', id);
+        this.$store.dispatch('updateConfigTiming', { id });
       },
       getColor(direction) {
         return direction === 'down' ? 'red' : 'green';

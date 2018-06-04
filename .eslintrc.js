@@ -9,7 +9,10 @@ module.exports = {
   env: {
     browser: true,
   },
-  extends: 'airbnb-base',
+  "extends": [
+    "airbnb-base",
+    "plugin:vue/recommended"
+  ],
   // required to lint *.vue files
   plugins: [
     'html'
@@ -24,6 +27,7 @@ module.exports = {
   },
   // add your custom rules here
   rules: {
+    "no-console": "off",
     'comma-dangle': ['error', 'never'],
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
