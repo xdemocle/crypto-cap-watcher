@@ -8401,18 +8401,6 @@ rl.Ph = tl.g;
 rl.bi = !1;
 
 function ul(a, b) {
-    var c = document.createElement("script");
-    c.type = "text/javascript";
-    c.src = a;
-    c.onload = function() {
-        G(ql, "library(" + a + ") is loaded");
-        b.resolve()
-    };
-    c.onerror = function() {
-        E(ql, "library(" + a + ") cannot be loaded");
-        b.reject()
-    };
-    document.head.appendChild(c)
 }
 rl.load = function(a) {
     a = void 0 === a ? !1 : a;
@@ -12508,11 +12496,11 @@ function Bp(a, b) {
 }
 
 function Fp(a) {
-    Bp(a, !0);
-    a.o = setTimeout(function() {
-        a.g.displayStatus = Cp(a);
-        a.o = null
-    }, 5E3)
+    // Bp(a, !0);
+    // a.o = setTimeout(function() {
+    //     a.g.displayStatus = Cp(a);
+    //     a.o = null
+    // }, 5E3)
 }
 
 function qp(a) {

@@ -2,8 +2,8 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
+    "parser": "babel-eslint",
     sourceType: 'module'
   },
   env: {
@@ -15,6 +15,7 @@ module.exports = {
   ],
   // required to lint *.vue files
   plugins: [
+    'vue',
     'html'
   ],
   // check if imports actually resolve

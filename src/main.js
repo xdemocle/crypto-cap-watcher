@@ -55,6 +55,6 @@ Vue.use(VueSocketio, socketio(store.state.constants.wsLivetimePricesUrl), store)
 new Vue({
   el: '#app',
   store,
-  template: '<App/>',
-  components: { App }
+  components: { App },
+  template: '<App/>'
 });
