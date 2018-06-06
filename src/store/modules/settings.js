@@ -71,10 +71,14 @@ const mutations = {
         }
       });
 
-      _.each(response.data.timing, (timing) => {
+      _.each(response.data.timing, (timing, index) => {
         const item = _.find(state.config.timing, { id: timing.id });
 
-        if (!item) {
+        if (item) {
+          const timingUpd = timing;
+          timingUpd.visible = state.config.timing[index].visible;
+          Vue.set(state.config.timing, index, timingUpd);
+        } else {
           state.config.timing.push(timing);
         }
       });
