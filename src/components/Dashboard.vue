@@ -7,8 +7,8 @@
       fluid
       class="dashboard__header">
 
-      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
-        <v-card class="py-3">
+      <v-flex d-flex-auto-width content-vertical-center px-1 py-1>
+        <v-card class="py-2">
           <v-card-text class="text-xs-center py-2">
             <v-icon x-large>monetization_on</v-icon>
           </v-card-text>
@@ -20,8 +20,8 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
-        <v-card class="py-3">
+      <v-flex d-flex-auto-width content-vertical-center px-1 py-1>
+        <v-card class="py-2">
           <v-card-text class="text-xs-center py-2">
             <v-icon x-large>timelapse</v-icon>
           </v-card-text>
@@ -33,8 +33,8 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex d-flex-auto-width content-vertical-center px-2 py-2>
-        <v-card class="py-3">
+      <v-flex d-flex-auto-width content-vertical-center px-1 py-1>
+        <v-card class="py-2">
           <v-card-text class="py-2">
             <div class="display-1 mb-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{bitcoinPercentage}}</div>
             <div class="title ellipsis" title="Bitcoin Dominance">Bitcoin Dominance</div>
@@ -57,8 +57,32 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex d-flex-auto-width content-vertical-center px-2 py-2 v-show="showTether">
-        <v-card class="py-3" v-if="tickers.USDT">
+      <v-flex d-flex-auto-width content-vertical-center px-1 py-1 v-show="showEthereum">
+        <v-card class="py-2">
+          <v-card-text class="py-2">
+            <div class="display-1 mb-2 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{ethereumPercentage}}</div>
+            <div class="title ellipsis" title="Bitcoin Dominance">Ethereum Dominance</div>
+          </v-card-text>
+          <v-card-text class="py-2" v-if="tickers.ETH">
+            <div class="flex mb-2">
+              <span class="display-2" v-bind:class="priceClass('ETH')">{{tickers.ETH.PRICE | currency('$', ',', 2, '.', 'front', false)}}</span>
+              <v-tooltip top class="d-inline-block">
+                <div class="flex align-center ml-2" slot="activator" :class="{'green--text': priceArrow24Hour('ETH') == 'up', 'red--text': priceArrow24Hour('ETH') == 'down'}">
+                  <v-icon class="text-xs-center" style="line-height: 0.5rem;font-size: 3.5rem;width: 2rem;" :color="priceArrow24Hour('ETH') == 'up' ? 'green' : 'red'">arrow_drop_{{priceArrow24Hour('ETH')}}</v-icon>
+                  <span class="d-flex">{{tickers.ETH.CHANGE24HOURPCT}}%</span>
+                </div>
+                <span>24 Hours Price difference</span>
+              </v-tooltip>
+            </div>
+            <v-tooltip bottom>
+              <span slot="activator" class="title ellipsis">Ethereum Price</span>
+              <span>Real-time price from Cryptocompare.com</span>
+            </v-tooltip>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex d-flex-auto-width content-vertical-center px-1 py-1 v-show="showTether">
+        <v-card class="py-2" v-if="tickers.USDT">
           <v-card-text class="py-2">
             <div class="display-1 mb-3 dynamic-placeholder" v-bind:class="{'opa-a': fadeToggle}">{{currencyDisplay(tickers.USDT['24h_volume_usd'])}}</div>
             <div class="title ellipsis">24h Tether Volume</div>
@@ -92,8 +116,8 @@
       class="dashboard__body">
 
       <v-scale-transition>
-        <v-flex xs12 sm3 md3 px-2 py-2 v-show="showCardsHint">
-          <v-card class="py-3">
+        <v-flex xs12 sm3 md3 px-1 py-1 v-show="showCardsHint">
+          <v-card class="py-2">
             <v-card-text>
               <div class="title">Restore Cards</div>
             </v-card-text>
@@ -110,8 +134,8 @@
       </v-scale-transition>
 
       <v-scale-transition v-for="(card, index) in historySorted" v-bind:key="index">
-        <v-flex d-flex-auto-width xs6 sm3 md3 px-2 py-2 v-show="cardVisibility(card.id)">
-          <v-card class="py-3" width="100%">
+        <v-flex d-flex-auto-width xs6 sm4 md3 px-1 py-1 v-show="cardVisibility(card.id)">
+          <v-card class="py-2" width="100%">
             <v-btn fab icon absolute small right @click.native="toggleCardVisibility(card.id)" class="hidden-md-and-down hidden-if-chromecast">
               <v-icon>close</v-icon>
             </v-btn>
@@ -166,9 +190,13 @@
       fadeToggle: false
     }),
     computed: {
+      settings() {
+        return this.$store.state.settings;
+      },
       ...mapGetters({
         totalMarketCap: 'total_market_cap',
         bitcoinPercentage: 'bitcoin_percentage',
+        ethereumPercentage: 'ethereum_percentage',
         total24hVol: 'total_24h_volume',
         history: 'history'
       }),
@@ -193,6 +221,9 @@
       },
       showTether() {
         return this.$store.state.settings.tether;
+      },
+      showEthereum() {
+        return this.$store.state.settings.ethereum;
       },
       tickers() {
         return this.$store.state.tickers.updates;

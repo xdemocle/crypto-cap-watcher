@@ -38,10 +38,18 @@
         </v-list-tile>
         <v-list-tile>
           <v-list-tile-action>
+            <v-switch v-model="switchEthereum" color="purple"></v-switch>
+          </v-list-tile-action>
+          <v-list-tile-title>
+            Ethereum (ETH)
+          </v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
             <v-switch v-model="tetherSwitch" color="purple"></v-switch>
           </v-list-tile-action>
           <v-list-tile-title>
-            Tether USDT
+            Tether (USDT)
           </v-list-tile-title>
         </v-list-tile>
       </v-list>
@@ -148,6 +156,20 @@
       drawer: false
     }),
     computed: {
+      switchEthereum: {
+        get() {
+          return this.$store.state.settings.ethereum;
+        },
+        set() {
+          if (this.castConnected) {
+            this.$chromecast.Sender.sendMessage({
+              context: 'commit',
+              method: 'settings/ethereum'
+            });
+          }
+          return this.$store.commit('settings/switchEthereum');
+        }
+      },
       themeSwitch: {
         get() {
           return this.$store.state.settings.theme;
@@ -156,11 +178,11 @@
           if (this.castConnected) {
             this.$chromecast.Sender.sendMessage({
               context: 'commit',
-              method: 'switchTheme'
+              method: 'settings/switchTheme'
             });
           }
 
-          return this.$store.commit('switchTheme');
+          return this.$store.commit('settings/switchTheme');
         }
       },
       themeLabel() {
@@ -186,7 +208,7 @@
             this.$fullscreen.enter();
           }
 
-          return this.$store.commit('switchFullscreen');
+          return this.$store.commit('settings/switchFullscreen');
         }
       },
       showMillionsSwitch: {
@@ -197,11 +219,11 @@
           if (this.castConnected) {
             this.$chromecast.Sender.sendMessage({
               context: 'commit',
-              method: 'switchShowMillions'
+              method: 'settings/switchShowMillions'
             });
           }
 
-          return this.$store.commit('switchShowMillions');
+          return this.$store.commit('settings/switchShowMillions');
         }
       },
       tetherSwitch: {
@@ -212,11 +234,11 @@
           if (this.castConnected) {
             this.$chromecast.Sender.sendMessage({
               context: 'commit',
-              method: 'switchTether'
+              method: 'settings/switchTether'
             });
           }
 
-          return this.$store.commit('switchTether');
+          return this.$store.commit('settings/switchTether');
         }
       },
       requestProgressHidden() {

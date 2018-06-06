@@ -1,24 +1,12 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 import axios from 'axios';
 
-// initial states
-const state = {
-  requestBusy: false,
-  secondsLeft: 0,
-  last_updated: null,
-  clientLastUpdated: null,
-  total_market_cap: 0,
-  bitcoin_percentage: 0,
-  total_24h_volume: 0,
-  history: []
-};
-
 // getters
 const getters = {
   requestBusy: state => state.requestBusy,
   secondsLeft: state => state.secondsLeft,
   secondsPassed(state, rootState) {
-    return (rootState.config.checkEachMinutes * 60) - state.secondsLeft;
+    return (rootState['settings/config'].checkEachMinutes * 60) - state.secondsLeft;
   },
   last_updated: state => state.last_updated,
   clientLastUpdated: state => state.clientLastUpdated,
@@ -26,6 +14,9 @@ const getters = {
   total_24h_volume: state => state.total_24h_volume,
   bitcoin_percentage(state) {
     return [state.bitcoin_percentage, '%'].join('');
+  },
+  ethereum_percentage(state) {
+    return [state.ethereum_percentage, '%'].join('');
   },
   history: state => state.history
 };
@@ -81,6 +72,7 @@ const mutations = {
     state.total_market_cap = response.data.total_market_cap;
     state.total_24h_volume = response.data.total_24h_volume;
     state.bitcoin_percentage = response.data.bitcoin_percentage;
+    state.ethereum_percentage = response.data.ethereum_percentage;
     state.history = response.data.history;
   },
   setSecondsLeft(state, { rootState, seconds }) {
@@ -93,6 +85,19 @@ const mutations = {
 
     state.secondsLeft = realSeconds;
   }
+};
+
+// initial states
+const state = {
+  requestBusy: false,
+  secondsLeft: 0,
+  last_updated: null,
+  clientLastUpdated: null,
+  total_market_cap: 0,
+  bitcoin_percentage: 0,
+  ethereum_percentage: 0,
+  total_24h_volume: 0,
+  history: []
 };
 
 export default {

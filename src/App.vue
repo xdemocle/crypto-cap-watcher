@@ -48,7 +48,7 @@
       bootstrap() {
         // First get remote settings than start the setInterval for updating
         // local data from history and secondsLeft from next request.
-        this.$store.dispatch('getsettings', () => {
+        this.$store.dispatch('settings/getsettings', () => {
           if (!intervalChecker) {
             intervalChecker = window.setInterval(this.updateSecondsLeft, 1000);
           }
@@ -128,7 +128,7 @@
       this.$store.dispatch('initializeStatus', this.onResize);
 
       // Always restore fullscreen flag at bootstrap
-      this.$store.commit('resetFullscreen');
+      this.$store.commit('settings/resetFullscreen');
 
       // Bootstrap the app settings and other tickers
       this.bootstrap();
@@ -177,10 +177,6 @@
         if (_.isString(message)) {
           data = JSON.parse(message);
         }
-
-        // if (!data.context) {
-        //   debugger
-        // }
 
         data.context = !data.context ? 'dispatch' : data.context;
 

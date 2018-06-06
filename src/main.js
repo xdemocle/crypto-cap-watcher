@@ -11,6 +11,7 @@ import VueChromecastPlugin from 'vue-chromecast-plugin';
 
 // Helpers
 import colors from 'vuetify/es5/util/colors';
+import { version } from '../package.json';
 
 import App from './App';
 import store from './store';
@@ -44,8 +45,8 @@ Vue.use(Vuetify, {
   }
 });
 
-// Vue.config.productionTip = process.env.NODE_ENV;
-Vue.config.productionTip = 'production';
+Vue.config.productionTip = process.env.NODE_ENV;
+Vue.appVersion = version;
 
 window.Vue = Vue;
 

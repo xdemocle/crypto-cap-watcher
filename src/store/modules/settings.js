@@ -2,20 +2,12 @@ import Vue from 'vue';
 import axios from 'axios';
 import _ from 'lodash';
 
-// initial states
-const states = {
-  theme: true,
-  fullscreen: false,
-  tether: false,
-  showMillions: true,
-  config: {}
-};
-
 // getters
 const getters = {
   theme: state => state.theme,
   fullscreen: state => state.fullscreen,
   tether: state => state.tether,
+  ethereum: state => state.ethereum,
   showMillions: state => state.showMillions,
   config: state => state.config
 };
@@ -48,6 +40,9 @@ const actions = {
 const mutations = {
   switchTheme(state) {
     state.theme = !state.theme;
+  },
+  switchEthereum(state) {
+    state.ethereum = !state.ethereum;
   },
   switchFullscreen(state) {
     state.fullscreen = !state.fullscreen;
@@ -98,8 +93,19 @@ const mutations = {
   }
 };
 
+// initial states
+const state = {
+  theme: true,
+  fullscreen: false,
+  tether: false,
+  ethereum: true,
+  showMillions: true,
+  config: {}
+};
+
 export default {
-  states,
+  namespaced: true,
+  state,
   getters,
   actions,
   mutations

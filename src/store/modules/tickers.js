@@ -3,12 +3,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import CCC from '@/libs/ccc';
 
-// initial states
-const state = {
-  connect: false,
-  updates: {}
-};
-
 // getters
 const getters = {
   connect: state => state.connect,
@@ -77,6 +71,12 @@ const mutations = {
 
     state.updates[data.symbol] = data;
   }
+};
+
+// initial states
+const state = {
+  connect: false,
+  updates: {}
 };
 
 export default {

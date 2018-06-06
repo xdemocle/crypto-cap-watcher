@@ -2,15 +2,6 @@
 import _ from 'lodash';
 import Visibility from 'visibilityjs';
 
-// initial states
-const state = {
-  online: false,
-  pageActive: true,
-  isChromecast: false,
-  casting: 0,
-  castButtonVisibility: true
-};
-
 // actions
 const actions = {
   initializeStatus({ commit }, onResizeHandler) {
@@ -78,6 +69,15 @@ const mutations = {
   switchCastButtonVisibility(state, { status }) {
     state.castButtonVisibility = status;
   }
+};
+
+// initial states
+const state = {
+  online: false,
+  pageActive: true,
+  isChromecast: false,
+  casting: 0,
+  castButtonVisibility: true
 };
 
 export default {
