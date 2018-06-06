@@ -69,7 +69,7 @@
         fluid
         style="max-width: 310px">
         <v-flex xs6 class="pl-3 pr-3 py-2 heading" v-for="(card, index) in timingSorted" v-bind:key="index">
-          <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.shortLabel" hide-details></v-switch>
+          <v-switch :input-value="card.visible" @click="toggleCardVisibility(card.id)" color="green" :label="card.label" hide-details></v-switch>
         </v-flex>
       </v-layout>
     </v-navigation-drawer>

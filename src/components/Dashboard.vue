@@ -142,7 +142,7 @@
             <v-card-text>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{currencyDisplay(card.total_market_cap)}}<v-icon
+                  {{currencyDisplay(card.total_market_cap)}}<br /><v-icon
                     :color="getColor(card.total_market_cap_arrow)">arrow_{{card.total_market_cap_arrow}}ward</v-icon
                   ><span class="subheading" :class="getClass(card.total_market_cap_arrow)">{{card.total_market_cap_perc}}%</span>
                 </div>
@@ -150,7 +150,7 @@
               </div>
               <div class="mb-3">
                 <div class="headline mb-1">
-                  {{currencyDisplay(card.total_24h_volume)}}<v-icon
+                  {{currencyDisplay(card.total_24h_volume)}}<br /><v-icon
                     :color="getColor(card.total_24h_volume_arrow)">arrow_{{card.total_24h_volume_arrow}}ward</v-icon
                   ><span class="subheading" :class="getClass(card.total_24h_volume_arrow)">{{card.total_24h_volume_perc}}%</span>
                 </div>
@@ -165,7 +165,7 @@
                 Bitcoin Dominance
               </div>
               <div class="pt-1 pb-0 mb-0">
-                <div class="title ellipsis">{{getCardLabel(card.id)}}</div>
+                <div class="title ellipsis">Changes {{getCardLabel(card.id)}}</div>
               </div>
             </v-card-text>
           </v-card>
