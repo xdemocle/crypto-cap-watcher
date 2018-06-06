@@ -13,7 +13,8 @@ const state = {
     let apiUrl = null;
 
     if (Vue.config.productionTip === 'development') {
-      apiUrl = 'http://localhost:5000';
+      // apiUrl = 'http://localhost:5000';
+      apiUrl = 'https://crypto-cap-watcher-api.herokuapp.com';
     } else {
       apiUrl = 'https://crypto-cap-watcher-api.herokuapp.com';
     }
