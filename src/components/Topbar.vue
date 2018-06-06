@@ -282,14 +282,14 @@
         });
       },
       toggleCardVisibility(id) {
-        this.$store.dispatch('updateConfigTiming', { id }).then(() => {
+        this.$store.dispatch('settings/updateConfigTiming', { id }).then(() => {
           // We send a sync command to the chromecast receiver
           if (this.castConnected) {
             const timing = _.find(this.$store.state.settings.config.timing, { id });
             const status = timing.visible || false;
 
             this.$chromecast.Sender.sendMessage({
-              method: 'updateConfigTiming',
+              method: 'settings/updateConfigTiming',
               payload: { id, status }
             });
           }
