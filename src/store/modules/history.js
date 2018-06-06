@@ -38,13 +38,16 @@ const actions = {
     const url = [rootState.constants.apiUrl(), '/statistics'].join('');
     const ajaxCall = axios.get(url);
 
-    ajaxCall.then((response) => {
-      commit('handleResponse', { response, commit });
-      commit('setSecondsLeft', { rootState });
-      commit('setbusy', false);
-    }).catch(() => {
-      commit('setbusy', false);
-    });
+    ajaxCall
+      .then((response) => {
+        commit('handleResponse', { response, commit });
+        commit('setSecondsLeft', { rootState });
+        commit('setbusy', false);
+      })
+      .catch(() => {
+        commit('setbusy', false);
+        setTimeout(() => this.dispatch('getData', bypass), 1500);
+      });
 
     return ajaxCall;
   },

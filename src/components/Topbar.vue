@@ -277,7 +277,10 @@
           this.throttlingDialog = response === 'throttling' || false;
 
           if (this.castConnected) {
-            this.$chromecast.Sender.sendMessage({ method: 'getdata' });
+            this.$chromecast.Sender.sendMessage({
+              context: 'dispatch',
+              method: 'getdata'
+            });
           }
         });
       },
@@ -289,6 +292,7 @@
             const status = timing.visible || false;
 
             this.$chromecast.Sender.sendMessage({
+              context: 'dispatch',
               method: 'settings/updateConfigTiming',
               payload: { id, status }
             });

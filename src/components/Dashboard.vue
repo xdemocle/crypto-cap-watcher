@@ -250,6 +250,7 @@
             const status = timing.visible || false;
 
             this.$chromecast.Sender.sendMessage({
+              context: 'dispatch',
               method: 'settings/updateConfigTiming',
               payload: { id, status }
             });

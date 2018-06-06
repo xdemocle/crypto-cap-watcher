@@ -103,17 +103,25 @@
 
         dashboardBody.style.setProperty('height', dashboardBodyHeight);
         dashboardBody.style.height = `${dashboardBodyHeight}px`;
+      },
+      preserveBooleans(items) {
+        const itemsFiltered = _.each(items, (value, key, collection) => {
+          if (!_.isBoolean(value) && !_.isObject(value)) {
+            delete collection[key];
+          } else {
+            collection[key] = this.preserveBooleans(value);
+          }
+        });
+        return itemsFiltered;
+      },
+      senderConnectedAction() {
+        // Let's replace the whole settings state container, removing the non
+        // booleans values and send it back to the ChromeCast receiver for
+        // syncing our preferences on remote dashboard.
+        const settingsCleaned = JSON.parse(JSON.stringify(this.$store.state.settings));
+        const settingsReady = this.preserveBooleans(settingsCleaned);
+        this.$chromecast.Sender.sendMessage(JSON.stringify(settingsReady));
       }
-      // preserveBooleans(items) {
-      //   const itemsFiltered = _.each(items, (value, key, collection) => {
-      //     if (!_.isBoolean(value) && !_.isObject(value)) {
-      //       delete collection[key];
-      //     } else {
-      //       collection[key] = preserveBooleans(value);
-      //     }
-      //   });
-      //   return itemsFiltered;
-      // }
     },
     created() {
       // Font face observer for material icons
@@ -151,76 +159,59 @@
         if (action.type === 'getdata') {
           if (this.$store.state.status.online) {
             this.$store.dispatch('getTickerData', 'tether');
-          } else {
-            // If network error try again
-            setTimeout(this.getdata, 1500);
-          }
-        } else if (action.type === 'getTickerData') {
-          if (!this.$store.state.status.online) {
-            // If network error try again
-            setTimeout(() => {
-              this.$store.dispatch('getTickerData', 'tether');
-            }, 1500);
           }
         }
       });
     },
     mounted() {
-      // If is a chromecast device receiver app we force the hiding the button
+      // If is a chromecast device receiver we add some extra actions and listeners
       if (this.$chromecast.Receiver) {
         this.$store.dispatch('updateCastButtonVisibilityState', false);
+
+        this.$chromecast.$on('message', (message) => {
+          let data = message;
+
+          if (_.isString(message)) {
+            data = JSON.parse(message);
+          }
+
+          if (data.context) {
+            store[data.context](data.method, data.payload);
+          } else {
+            this.$store.dispatch('settings/updateContainer', message);
+          }
+        });
       }
 
-      this.$chromecast.$on('message', (message) => {
-        let data = message;
+      // If is a normal browser with sender capabilities we listen for events
+      // from receiver.
+      if (!this.isChromecast) {
+        this.$chromecast.$on('sessionstatechanged', (status) => {
+          // Default for cancel/removed/timeout state or error or disconnected
+          let statusCode = null;
 
-        if (_.isString(message)) {
-          data = JSON.parse(message);
-        }
+          if (status === 'SESSION_STARTED' || status === 'SESSION_RESUMED') {
+            statusCode = 2;
+            this.senderConnectedAction();
+          } else if (status === 'SESSION_STARTING' || status === 'SESSION_ENDING') {
+            statusCode = 1;
+          } else {
+            [
+              'cancel',
+              'removed',
+              'timeout',
+              'SESSION_START_FAILED',
+              'SESSION_ENDED'
+            ].forEach((statusNegative) => {
+              statusCode = status === statusNegative && 0;
+            });
+          }
 
-        data.context = !data.context ? 'dispatch' : data.context;
-
-        store[data.context](data.method, data.payload);
-      });
-
-      this.$chromecast.$on('sessionstatechanged', (status) => {
-        // Default for cancel/removed/timeout state or error or disconnected
-        let statusCode = null;
-
-        if (status === 'SESSION_STARTED' || status === 'SESSION_RESUMED') {
-          statusCode = 2;
-        } else if (status === 'SESSION_STARTING' || status === 'SESSION_ENDING') {
-          statusCode = 1;
-        } else {
-          [
-            'cancel',
-            'removed',
-            'timeout',
-            'SESSION_START_FAILED',
-            'SESSION_ENDED'
-          ].forEach((statusNegative) => {
-            statusCode = status === statusNegative && 0;
-          });
-        }
-
-        if (!_.isNull(statusCode)) {
-          this.$store.dispatch('updateCastState', statusCode);
-        }
-      });
-
-      // Let's watch the whole settings state container, removing the non
-      // booleans values and send it back to the ChromeCast receiver for
-      // syncing our preferences on remote dashboard.
-      // if (this.$store.state.status.casting === 2) {
-      //   this.$store.watch(() =>
-      //   {
-      //     return this.$store.state.settings;
-      //   }, (settings) => {
-      //     const settingsCleaned = JSON.parse(JSON.stringify(settings));
-      //     const settingsReady = this.preserveBooleans(settingsCleaned);
-      //     this.$chromecast.Sender.sendMessage(JSON.stringify(settingsReady));
-      //   }, { deep: true });
-      // }
+          if (!_.isNull(statusCode)) {
+            this.$store.dispatch('updateCastState', statusCode);
+          }
+        });
+      }
     },
     watch: {
       pageActive(status) {

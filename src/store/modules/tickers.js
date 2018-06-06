@@ -15,9 +15,13 @@ const actions = {
     const url = [rootState.constants.apiUrlCoinmarketcap, '/', id, '/'].join('');
     const ajaxCall = axios.get(url);
 
-    ajaxCall.then((response) => {
-      commit('handleTickerResponse', response.data[0]);
-    });
+    ajaxCall
+      .then((response) => {
+        commit('handleTickerResponse', response.data[0]);
+      })
+      .catch(() => {
+        setTimeout(() => this.dispatch('getTickerData', id), 1500);
+      });
 
     return ajaxCall;
   }

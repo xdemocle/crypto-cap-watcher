@@ -33,6 +33,9 @@ const actions = {
     });
 
     return ajaxCall;
+  },
+  updateContainer({ commit }, response) {
+    commit('setContainer', response);
   }
 };
 
@@ -94,6 +97,11 @@ const mutations = {
   },
   setTimingWrapper(state, { index, visible }) {
     state.config.timing[index].visible = visible;
+  },
+  setContainer(state, newState) {
+    _.each(state, (propValue, propKey) => {
+      state[propKey] = newState[propKey];
+    });
   }
 };
 
