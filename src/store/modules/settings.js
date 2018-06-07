@@ -2,6 +2,29 @@ import Vue from 'vue';
 import axios from 'axios';
 import _ from 'lodash';
 
+
+function setValuesShadow(state, newState) {
+  return _.each(state, (value, key) => {
+    if (!_.isArray(value) && !_.isObject(value)) {
+      state[key] = newState[key];
+    } else {
+      return _.each(value, (propValue, propKey, collection) => {
+        const Collection = collection;
+
+        if (!_.isArray(value[propKey]) && !_.isObject(value[propKey])) {
+          Collection[propKey] = propValue;
+        } else {
+          return setValuesShadow(value, collection);
+        }
+
+        return Collection;
+      });
+    }
+
+    return state;
+  });
+}
+
 // getters
 const getters = {
   theme: state => state.theme,
@@ -99,9 +122,7 @@ const mutations = {
     state.config.timing[index].visible = visible;
   },
   setContainer(state, newState) {
-    _.each(state, (propValue, propKey) => {
-      state[propKey] = newState[propKey];
-    });
+    return setValuesShadow(state, newState);
   }
 };
 
