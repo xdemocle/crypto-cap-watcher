@@ -120,6 +120,7 @@
         // syncing our preferences on remote dashboard.
         const settingsCleaned = JSON.parse(JSON.stringify(this.$store.state.settings));
         const settingsReady = this.preserveBooleans(settingsCleaned);
+        settingsReady.method = 'store.settings';
         this.$chromecast.Sender.sendMessage(JSON.stringify(settingsReady));
       }
     },
@@ -178,7 +179,9 @@
           if (data.context) {
             store[data.context](data.method, data.payload);
           } else {
-            this.$store.dispatch('settings/updateContainer', message);
+            // Removing extra settings coming from Sender not needed in the app
+            delete data.method;
+            this.$store.dispatch('settings/updateContainer', data);
           }
         });
       }
