@@ -55,7 +55,7 @@
     "jest": "^21.2.0",
     "jest-serializer-vue": "^0.3.0",
     "joi": "^13.1.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.13",
     "mdns-js": "^1.0.1",
     "moment-timezone": "^0.5.17",
     "nightwatch": "^0.9.12",
