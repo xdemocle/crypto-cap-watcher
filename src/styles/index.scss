@@ -1,0 +1,29 @@
+// We strive as  much is possible to not using px sizing because they don't
+// scale properly across breakpoints and not mutating when we use a different
+// pixel defined in root of the page.
+// Please use this tool: http://pxtorem.com/,
+// remembering to set base pixel size as 14px.
+
+// Before adding more custom styles here, remmebr to check of vuetify website:
+// Example about text, typography, spacing and so on:
+// https://vuetifyjs.com/en/styles/text
+// https://vuetifyjs.com/en/styles/typography
+// https://vuetifyjs.com/en/styles/spacing
+//
+// The more we reuse stuff already defined in our framework of choice, faster is
+// our development when is matter to upgrade dependencies or fixing bugs.
+
+// layout
+html {
+  font-weight: 400;
+}
+
+.app-version {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+}

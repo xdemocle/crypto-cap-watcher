@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Admin</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" />
+  <style>
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      text-align: center;
+      margin: calc(50vh - 6rem) 0 0 0;
+    }
+
+    .button-reset {
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      font-size: 2rem;
+      font-weight: bold;
+      display: inline-block;
+      margin: 0 auto;
+      color: #dcfbb4;
+      background-color: green;
+      border: 0.7rem solid #d4f7da;
+      border-radius: 50%;
+      transition: all 0.3s;
+      box-sizing: border-box;
+      width: 12rem;
+      height: 12rem;
+      line-height: 10rem;
+      cursor: pointer;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 0 0 rgba(0, 0, 0, 0.1);
+      text-align: center;
+      outline: none;
+      user-select: none;
+    }
+
+    .button-reset:hover {
+      box-shadow: 0 0 2em rgba(0, 0, 0, 0.1), inset 0 0 1em rgba(0, 0, 0, 0.1);
+      background-color: #29a074;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but this web page doesn't work properly without JavaScript
+      enabled. Please enable it to continue.</strong>
+  </noscript>
+
+  <div class="container">
+    <button onClick="cleanUpAll()" class="button-reset">Reset</button>
+  </div>
+
+  <script>
+    function cleanUpAll() {
+      clearServiceWorkers()
+      clearLocalStorage()
+      clearAllCookies()
+
+      var result = window.confirm('App resetted correctly!\nPlease, now navigate to main page...')
+
+      if (result) {
+        window.location.href = '/'
+      }
+    }
+
+    function clearServiceWorkers() {
+      if ('serviceWorker' in navigator) {
+        window.navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (let registration of registrations) {
+            registration.unregister()
+          }
+        })
+      }
+    }
+
+    function clearLocalStorage() {
+      window.localStorage.clear()
+    }
+
+    function clearAllCookies() {
+      var cookies = window.document.cookie.split(";");
+
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    }
+  </script>
+</body>
+
+</html>
